@@ -39,6 +39,7 @@ class Mailer
       email.set_subject("test")
       email.set_text(plain)
       email.set_html(html)
+      email.add_substitution("#b00#", ["Yo!"])
       email.add_substitution("#aaa#", ["Yo!"])
       email.add_filter("templates", "enabled", 1)
       email.add_filter("templates", "template_id", ENV["TEMP_ID_REVERSI"])
