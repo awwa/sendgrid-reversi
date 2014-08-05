@@ -31,15 +31,23 @@ class Mailer
     end
   end
 
-  def send(to, plain, html)
+  def send(game)
     begin
+      # prepare game data
+      prep = game.to_prepared
+
+      # send email
       email = SendgridRuby::Email.new
-      email.add_to(to)
+      email.add_to(prep.player_even)
       email.set_from(@parse_address)
       email.set_subject("test")
-      email.set_text(plain)
-      email.set_html(html)
-      email.add_substitution("#b00#", ["Yo!"])
+      email.set_text("aaa")
+      email.set_html("aaa")
+      for row in 0..7 do
+        for col in 0..7 do
+          email.add_substitution("#b#{row}#{col}#", [prep.board[row][col]])
+        end
+      end
       email.add_substitution("#aaa#", ["Yo!"])
       email.add_filter("templates", "enabled", 1)
       email.add_filter("templates", "template_id", ENV["TEMP_ID_REVERSI"])
