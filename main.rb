@@ -7,91 +7,95 @@ require './mailer'
 require './game'
 
 post '/game' do
+  begin
+    # parse email address from request
+    from = Addresses.get_address(params[:from])
+    to = Addresses.get_address(params[:subject])
 
-  #puts params.inspect
-  # メールアドレスを抽出する
-  from = Addresses.get_address(params[:from])
-  to = Addresses.get_address(params[:subject])
-
-  # nilの場合アドレス抽出に失敗した
-  mailer = Mailer.new
-  if from != nil && to == nil then
-    mailer.send_message(from, "対戦相手のメールアドレスの抽出に失敗しました。件名に対戦相手のメールアドレスをセットしてメールを送信してください。")
-    return 'Fail to parse to address'
-  end
-  if from == nil && to == nil then
-    puts "アドレスの抽出に失敗しました。リクエスト内容を確認して下さい。"
-    puts "from: #{params[:from]}"
-    puts "subject: #{params[:subject]}"
-    return 'Fail to parse to and from address'
-  end
-
-  # DBでセッションレコードの存在を確認する
-  dba = DbAccess.new
-  game = dba.find(from, to)
-  # なければ新規ゲーム生成
-  if game == nil then
-    game = Game.new
-    game.player_odd = to      # 奇数：先手(黒)
-    game.player_even = from   # 偶数：後手(白)
-    id = dba.insert(game)
-    game = dba.findById(id)
-    puts "new game: #{game._id}"
-  end
-
-  # 各プレイヤーに適切なメール送信
-  mailer.send(game)
-
-  'Hello'
-end
-
-post '/event' do
-  request.body.rewind
-  data = JSON.parse(request.body.read)
-
-  data.each{|event|
-    begin
-      # clickイベントのみ処理
-      break if event['event'] != "click"
-      # 送信元アドレス
-      email = event['email']
-      # urlをパース
-      event_data = Game.parse_cell_url(event['url'])
-      # イベントを検査
-      game = validate_event(event_data)
-      if game == nil then
-        puts "該当ゲームが見つからないので無視したいところ"
-        break
-      end
-      # イベントの処理
-      game = game.handle_turn(event_data['row'], event_data['col'])
-      # 保存
-      dba = DbAccess.new
-      dba.update(game)
-      # 通知メール
-      mailer = Mailer.new
-      mailer.send(game)
-
-    rescue => e
-      puts e.backtrace
-      puts e.inspect
-      mailer = Mailer.new
-      mailer.send_message(email, "異常なイベント発生") if email != nil
+    # fail to parse address if it is nil
+    mailer = Mailer.new
+    if from != nil && to == nil then
+      logger.info "対戦相手のメールアドレスの抽出に失敗しました。件名に対戦相手のメールアドレスをセットしてメールを送信してください。"
+      return 'Fail to parse to address'
     end
-  }
+    if from == nil && to == nil then
+      logger.info "アドレスの抽出に失敗しました。リクエスト内容を確認して下さい。"
+      logger.info "from: #{params[:from]}"
+      logger.info "subject: #{params[:subject]}"
+      return 'Fail to parse to and from address'
+    end
+    # get game data from DB
+    dba = DbAccess.new
+    game = dba.find(from, to)
+    # create game data if not exist
+    if game == nil then
+      game = Game.new
+      # odd:first move:black
+      game.player_odd = to
+      # even:second move:white
+      game.player_even = from
+      id = dba.insert(game)
+      game = dba.findById(id)
+      #puts "create new game"
+      logger.info "create new game"
+    end
+
+    # send email for each player
+    logger.info "game._id: #{game._id}"
+    mailer.send(game)
+  rescue => e
+    logger.error e.backtrace
+    logger.error e.inspect
+  end
 
   'Success'
 end
 
-def validate_event(event_data)
-  # Clickイベントの内容の正当性評価
-  dba = DbAccess.new
-  puts "obj_id: #{event_data["obj_id"]}"
-  dba.findById(BSON::ObjectId.from_string(event_data["obj_id"]))
+post '/event' do
+  begin
+    request.body.rewind
+    data = JSON.parse(request.body.read)
+    data.each{|event|
+      begin
+        dba = DbAccess.new
+        # handle only click event
+        next if event['event'] != "click"
+        logger.info "got click event"
+        # requester address
+        email = event['email']
+        # parse the url clicked by user
+        event_data = Game.parse_cell_url(event['url'])
+        # validate the event data
+        game = dba.findById(BSON::ObjectId.from_string(event_data["obj_id"]))
+        if game == nil then
+          logger.info "Could not find valid game. The event was ignored."
+          break
+        end
+        # handle turn
+        game = game.handle_turn(event_data['row'], event_data['col'])
+        # save the game
+        dba.update(game)
+
+        mailer = Mailer.new
+        mailer.send(game)
+        if game.is_finish then
+          # TODO send email for each player
+        end
+      rescue => e
+        logger.warn e.backtrace
+        logger.warn e.inspect
+      end
+    }
+  rescue => e
+    logger.error e.backtrace
+    logger.error e.inspect
+  end
+
+  'Success'
 end
 
+# Do not handle get event for security
+# User event is handled in post event
 get '/event' do
-  # セキュリティ上の理由でgetイベントは処理しない。
-  # ユーザ契機のイベントは全てpostで処理する。
   '受け付けました。'
 end

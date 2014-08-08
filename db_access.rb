@@ -24,7 +24,6 @@ class DbAccess
   end
 
   def find(player_even, player_odd)
-    # find game row
     row = @coll.find_one(:player_even => player_even, :player_odd => player_odd)
     game = Game.create_new(row) if row != nil
     return game if game != nil
@@ -32,7 +31,6 @@ class DbAccess
     row = @coll.find_one(:player_even => player_odd, :player_odd => player_even)
     game = Game.create_new(row) if row != nil
     return game if game != nil
-    # if not exists return nil.
     nil
   end
 

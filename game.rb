@@ -4,13 +4,10 @@ require 'uri'
 
 class Game
 
-  IMG_N = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/n.png'>"
-  IMG_B = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
-  IMG_W = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
+  attr_accessor :_id,:player_even, :player_odd, :turn, :board, :history, :pass_url
 
-  attr_accessor :_id,:player_even, :player_odd, :turn, :board, :history
-
-  #0 0 1 2 3 4 5 6 7
+  #  0 1 2 3 4 5 6 7
+  #0
   #1
   #2
   #3       w b
@@ -53,33 +50,24 @@ class Game
     obj
   end
 
-#
-#
-#    *
-#    bw
-#    wb
-#
-#
-#
-
-
-  def to_prepared
+  def to_prepared(app_host)
     prep = Game.new
     prep._id = @_id
     prep.player_even = @player_even
     prep.player_odd = @player_odd
     prep.turn = @turn
+    prep.pass_url = Game.generate_cell_url(app_host, @_id, @turn, -1, -1)
 
     # Embed Link tag
     for row in 0..7 do
       for col in 0..7 do
-        # 空セルのみチェック対象
+        # only nil cell
         if @board[row][col] == nil then
-          if check_available(row, col) then
-            url = Game.generate_cell_url(ENV["APP_HOST"], @_id, @turn, row, col)
-            prep.board[row][col] = "<a href='#{url}'>□</a>"
+          if is_available_cell(row, col) then
+            url = Game.generate_cell_url(app_host, @_id, @turn, row, col)
+            prep.board[row][col] = "<a href='#{url}'><img style='width: 100%;' src='#{app_host}/n.png'></a>"
           else
-            prep.board[row][col] = ""
+            prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/n.png'>"
           end
         end
       end
@@ -90,9 +78,9 @@ class Game
       for col in 0..7 do
         case @board[row][col]
         when :b then
-          prep.board[row][col] = IMG_B
+          prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/b.png'>"
         when :w then
-          prep.board[row][col] = IMG_W
+          prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/w.png'>"
         end
       end
     end
@@ -116,126 +104,98 @@ class Game
     data
   end
 
-  def check_available(row, col)
-    # ある場所を起点として8方向にチェックしていき、挟めるなら置ける場所と判断
-    ret = check_loop(row, col, -1, 0)  # 上
-    return ret if ret == true
-    ret = check_loop(row, col, -1, 1)  # 上右
-    return ret if ret == true
-    ret = check_loop(row, col,  0, 1)  # 　右
-    return ret if ret == true
-    ret = check_loop(row, col,  1, 1)  # 下右
-    return ret if ret == true
-    ret = check_loop(row, col,  1, 0)  # 下
-    return ret if ret == true
-    ret = check_loop(row, col,  1,-1)  # 下左
-    return ret if ret == true
-    ret = check_loop(row, col,  0,-1)  # 　左
-     return ret if ret == true
-    ret = check_loop(row, col, -1,-1)  # 上左
-    return ret if ret == true
-    # いずれにも該当しない場合false
+  def is_available_cell(row, col)
+    return true if is_available_dir(row, col, Dir::UP)
+    return true if is_available_dir(row, col, Dir::UP_RIGHT)
+    return true if is_available_dir(row, col, Dir::RIGHT)
+    return true if is_available_dir(row, col, Dir::DOWN_RIGHT)
+    return true if is_available_dir(row, col, Dir::DOWN)
+    return true if is_available_dir(row, col, Dir::DOWN_LEFT)
+    return true if is_available_dir(row, col, Dir::LEFT)
+    return true if is_available_dir(row, col, Dir::UP_LEFT)
     false
   end
 
-  def check_loop(st_row, st_col, delta_row, delta_col)
-    # 偶数ターン：白の番、奇数ターン：黒の番
-    is_even = (turn % 2 == 0)
-    # 置ける可能性
-    ret = false
+  def is_available_dir(st_row, st_col, dir)
+    # even is white. odd is black.
+    (turn % 2 == 0) ? pebble = :w : pebble = :b
+    has_possible = false
     i = 0
     begin
-      # ターゲットセル移動
+      # move target cell
       i += 1
-      tg_row = st_row + delta_row * i
-      tg_col = st_col + delta_col * i
+      tg_row = st_row + dir[:delta_row] * i
+      tg_col = st_col + dir[:delta_col] * i
 
       break if tg_row < 0
       break if tg_col < 0
       break if tg_row > 7
       break if tg_col > 7
 
-      # 隣が空セルの場合無条件で対象外
+      # unavailable if neighbor cell is nil
       return false if @board[tg_row][tg_col] == nil
 
-      # 偶数ターン=白の番
-      if is_even then
-        if ret == true then
-          # 可能性あり状態で隣が白の場合挟める
-          return true if @board[tg_row][tg_col] == :w
-        else
-          # 隣が白の場合対象外
-          return false if @board[tg_row][tg_col] == :w
-          # 隣が黒の場合可能性あり。次のループへ
-          ret = true
-          next
-        end
+      if has_possible == true then
+        # available if it can be between
+        return true if @board[tg_row][tg_col] == pebble
+      else
+        # unavailable if neighbor is same color
+        return false if @board[tg_row][tg_col] == pebble
+        # possible if neighbor is not same color. go next loop.
+        has_possible = true
+        next
       end
-
-      # 奇数ターン=黒の番
-      if !is_even then
-        if ret == true then
-          # 可能性あり状態で隣が黒の場合挟める
-          return true if @board[tg_row][tg_col] == :b
-        else
-          # 隣が黒の場合対象外
-          return false if @board[tg_row][tg_col] == :b
-          # 隣が白の場合可能性あり。次のループへ
-          ret = true
-          next
-        end
-      end
-      # 盤をはみ出すまでチェック
+      # until end of board
     end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
-    # 盤をはみ出したらおしまい
+    # finish the check
     false
   end
 
   def handle_turn(row, col)
-    is_even = (turn % 2 == 0)
-    if is_even then
-      pebble = :w
+    # even is white. odd is black.
+    (turn % 2 == 0) ? pebble = :w : pebble = :b
+    # process the game if valid cell
+    if row >= 0 && row <= 7 && col >= 0 && col <= 7 then
+      @board[row][col] = pebble
+      reverse(row, col, pebble)
+      @history.push("#{pebble.to_s}_#{row}_#{col}")
     else
-      pebble = :b
+      @history.push("pass")
     end
-    # クリックした場所に石を置く
-    @board[row][col] = pebble
-    # ひっくり返す
-    reverse(row, col, pebble)
-    # 歴史を刻む
-    @history.push("#{pebble.to_s}_#{row}_#{col}")
-    # ターンを進める
     @turn += 1
     self
   end
 
-  def reverse(row, col, pebble)
-    puts "reverse0"
-    reverse_loop(row, col, pebble, -1, 0) if check_loop(row, col, -1, 0)  # 上
-    puts "reverse1"
-    reverse_loop(row, col, pebble, -1, 1) if check_loop(row, col, -1, 1)  # 上右
-    puts "reverse2"
-    reverse_loop(row, col, pebble,  0, 1) if check_loop(row, col,  0, 1)  # 　右
-    puts "reverse3"
-    reverse_loop(row, col, pebble,  1, 1) if check_loop(row, col,  1, 1)  # 下右
-    puts "reverse4"
-    reverse_loop(row, col, pebble,  1, 0) if check_loop(row, col,  1, 0)  # 下
-    puts "reverse5"
-    reverse_loop(row, col, pebble,  1,-1) if check_loop(row, col,  1,-1)  # 下左
-    puts "reverse6"
-    reverse_loop(row, col, pebble,  0,-1) if check_loop(row, col,  0,-1)  # 　左
-    puts "reverse7"
-    reverse_loop(row, col, pebble, -1,-1) if check_loop(row, col, -1,-1)  # 上左
-    puts "reverse8"
+  def is_finish
+    # finish if 2 passes continue
+    return true if @history[-1] == "pass" && @history[-2] == "pass"
+    # no place
+    for row in 0..7 do
+      for col in 0..7 do
+        return false if @board[row][col] == nil
+      end
+    end
+    true
   end
 
-  def reverse_loop(st_row, st_col, pebble, delta_row, delta_col)
+  def reverse(row, col, pebble)
+    reverse_dir(row, col, pebble, Dir::UP)         if is_available_dir(row, col, Dir::UP)
+    reverse_dir(row, col, pebble, Dir::UP_RIGHT)   if is_available_dir(row, col, Dir::UP_RIGHT)
+    reverse_dir(row, col, pebble, Dir::RIGHT)      if is_available_dir(row, col, Dir::RIGHT)
+    reverse_dir(row, col, pebble, Dir::DOWN_RIGHT) if is_available_dir(row, col, Dir::DOWN_RIGHT)
+    reverse_dir(row, col, pebble, Dir::DOWN)       if is_available_dir(row, col, Dir::DOWN)
+    reverse_dir(row, col, pebble, Dir::DOWN_LEFT)  if is_available_dir(row, col, Dir::DOWN_LEFT)
+    reverse_dir(row, col, pebble, Dir::LEFT)       if is_available_dir(row, col, Dir::LEFT)
+    reverse_dir(row, col, pebble, Dir::UP_LEFT)    if is_available_dir(row, col, Dir::UP_LEFT)
+  end
+
+  def reverse_dir(st_row, st_col, pebble, dir)
     i = 0
     begin
-      # ターゲットセル移動
+      # move target cell
       i += 1
-      tg_row = st_row + delta_row * i
-      tg_col = st_col + delta_col * i
+      tg_row = st_row + dir[:delta_row] * i
+      tg_col = st_col + dir[:delta_col] * i
 
       break if tg_row < 0
       break if tg_col < 0
@@ -245,8 +205,18 @@ class Game
 
       @board[tg_row][tg_col] = pebble
 
-      # 盤をはみ出すまでチェック
+      # until end of board
     end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
   end
 
+  module Dir
+    UP          = {:delta_row => -1, :delta_col => 0}
+    UP_RIGHT    = {:delta_row => -1, :delta_col => 1}
+    RIGHT       = {:delta_row =>  0, :delta_col => 1}
+    DOWN_RIGHT  = {:delta_row =>  1, :delta_col => 1}
+    DOWN        = {:delta_row =>  1, :delta_col => 0}
+    DOWN_LEFT   = {:delta_row =>  1, :delta_col =>-1}
+    LEFT        = {:delta_row =>  0, :delta_col =>-1}
+    UP_LEFT     = {:delta_row => -1, :delta_col =>-1}
+  end
 end
