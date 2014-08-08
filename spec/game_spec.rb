@@ -41,6 +41,22 @@ describe "Game" do
     end
   end
 
+  describe "generate_cell_url" do
+    it "セルURL生成検査" do
+      Game.generate_cell_url("https://test.com", "12345", 222, 4, 5).should == "https://test.com/event?obj_id=12345&turn=222&row=4&col=5"
+    end
+  end
+
+  describe "parse_cell_url" do
+    it "セルURL解析検査" do
+      data = Game.parse_cell_url("https://test.com/event?obj_id=12345&turn=222&row=4&col=5")
+      data['obj_id'].should == "12345"
+      data['turn'].should == 222
+      data['row'].should == 4
+      data['col'].should == 5
+    end
+  end
+
   describe "to_prepared" do
     it "準備検査" do
       game = Game.new
@@ -55,11 +71,11 @@ describe "Game" do
       prep.player_even.should == "even@address.com"
       prep.player_odd.should == "odd@address.com"
       prep.turn.should == 100
-      prep.board[0][0].should == "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
-      prep.board[0][1].should == "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
+      prep.board[0][0].should == "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
+      prep.board[0][1].should == "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
       prep.board[0][2][0,7].should == "<a href"
-      prep.board[3][3].should == "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
-      prep.board[3][4].should == "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
+      prep.board[3][3].should == "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
+      prep.board[3][4].should == "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
     end
   end
 
@@ -446,5 +462,170 @@ describe "Game" do
     end
 
   end
+
+  #  0 1 2 3 4 5 6 7
+  #0
+  #1
+  #2       b
+  #3       w b
+  #4       b w
+  #5
+  #6
+  #7
+  describe "handle_turn" do
+    it "イベント処理検査" do
+      game = Game.new
+      game.player_even = "even@address.com"
+      game.player_odd = "odd@address.com"
+      game.turn = 1
+      game = game.handle_turn(2, 3)
+
+      game.turn.should == 2
+      game.board[2][3].should == :b
+      game.board[3][3].should == :b
+      game.history.length.should == 1
+      game.history[0].should == "b_2_3"
+    end
+  end
+
+  describe "reverse" do
+    #  0 1 2 3 4 5 6 7
+    #0 b b b b b b b b
+    #1 b w w w w w w w
+    #2 w w w w w w w b
+    #3 w w w w w w w w
+    #4 w w w w w w w w
+    #5 b w w w * w w b
+    #6 w w w w w w w w
+    #7 w w b w b w b w
+    it "ひっくり返す処理（上挟んでいる）検査" do
+      game = Game.new
+      game.player_even = "even@address.com"
+      game.player_odd = "odd@address.com"
+      game.turn = 1
+      # 初期化
+      for i in 0..7 do
+        for j in 0..7 do
+          game.board[i][j] = :w
+        end
+      end
+      for j in 0..7 do
+        game.board[0][j] = :b
+      end
+      game.board[1][0] = :b
+      game.board[2][7] = :b
+      game.board[5][0] = :b
+      game.board[5][4] = :b
+      game.board[5][7] = :b
+      game.board[7][2] = :b
+      game.board[7][4] = :b
+      game.board[7][6] = :b
+
+      # ひっくり返す
+      game.reverse( 5, 4, :b)
+
+      # 上
+      game.board[0][4].should == :b
+      game.board[1][4].should == :b
+      game.board[2][4].should == :b
+      game.board[3][4].should == :b
+      game.board[4][4].should == :b
+      # 置いた場所
+      game.board[5][4].should == :b
+      # # 右上
+      game.board[4][5].should == :b
+      game.board[3][6].should == :b
+      game.board[2][7].should == :b
+      # 右
+      game.board[5][5].should == :b
+      game.board[5][6].should == :b
+      game.board[5][7].should == :b
+      # 右下
+      game.board[6][5].should == :b
+      game.board[7][6].should == :b
+      # 下
+      game.board[6][4].should == :b
+      game.board[7][4].should == :b
+      # 左下
+      game.board[6][3].should == :b
+      game.board[7][2].should == :b
+      # 左
+      game.board[5][0].should == :b
+      game.board[5][1].should == :b
+      game.board[5][2].should == :b
+      game.board[5][3].should == :b
+      # 左上
+      game.board[4][3].should == :b
+      game.board[3][2].should == :b
+      game.board[2][1].should == :b
+      game.board[1][0].should == :b
+    end
+
+  end
+
+
+  describe "reverse_loop" do
+
+    #  0 1 2 3 4 5 6 7
+    #0
+    #1
+    #2
+    #3       w b
+    #4       b w
+    #5         b
+    #6
+    #7
+    it "ひっくり返す処理（上挟んでいる）検査" do
+      game = Game.new
+      game.player_even = "even@address.com"
+      game.player_odd = "odd@address.com"
+      game.turn = 1
+      game.board[5][4] = :b
+      game.reverse_loop( 5, 4, :b, -1, 0)
+
+      game.board[0][4].should == nil
+      game.board[1][4].should == nil
+      game.board[2][4].should == nil
+      game.board[3][4].should == :b
+      game.board[4][4].should == :b
+      game.board[5][4].should == :b
+      game.board[6][4].should == nil
+      game.board[7][4].should == nil
+    end
+
+    #  0 1 2 3 4 5 6 7
+    #0         b
+    #1         w
+    #2         w
+    #3       w w
+    #4       b w
+    #5         b
+    #6
+    #7
+    it "ひっくり返す処理（上挟んでいない）検査" do
+      game = Game.new
+      game.player_even = "even@address.com"
+      game.player_odd = "odd@address.com"
+      game.turn = 1
+      game.board[0][4] = :b
+      game.board[1][4] = :w
+      game.board[2][4] = :w
+      game.board[3][4] = :w
+      game.board[4][4] = :w
+      game.board[5][4] = :b
+      game.reverse_loop( 5, 4, :b, -1, 0)
+
+      game.board[0][4].should == :b
+      game.board[1][4].should == :b
+      game.board[2][4].should == :b
+      game.board[3][4].should == :b
+      game.board[4][4].should == :b
+      game.board[5][4].should == :b
+      game.board[6][4].should == nil
+      game.board[7][4].should == nil
+    end
+
+  end
+
 
 end

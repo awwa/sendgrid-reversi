@@ -13,6 +13,10 @@ class DbAccess
     @coll.insert(doc.to_array)
   end
 
+  def update(doc)
+    @coll.update({:_id => doc._id}, doc.to_array)
+  end
+
   def findById(id)
     row = @coll.find_one({:_id => id})
     game = Game.create_new(row) if row != nil

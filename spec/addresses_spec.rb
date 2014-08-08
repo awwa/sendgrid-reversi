@@ -11,6 +11,10 @@ describe "Addresses" do
       actual = Addresses.get_address("Your Name<your@address.com>")
       actual.should == "your@address.com"
     end
+    it "3階層ドメイン" do
+      actual = Addresses.get_address("your@sub.domain.address.com")
+      actual.should == "your@sub.domain.address.com"
+    end
     it "不正なアドレス" do
       actual = Addresses.get_address("your.address.com")
       actual.should == nil

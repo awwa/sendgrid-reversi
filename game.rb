@@ -1,9 +1,12 @@
 require 'mongo'
+require 'base64'
+require 'uri'
 
 class Game
 
-  IMG_B = "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
-  IMG_W = "<img src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
+  IMG_N = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/n.png'>"
+  IMG_B = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/b.png'>"
+  IMG_W = "<img style='width: 100%;'  src='https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/public/w.png'>"
 
   attr_accessor :_id,:player_even, :player_odd, :turn, :board, :history
 
@@ -41,6 +44,7 @@ class Game
 
   def self.create_new(data)
     obj = Game.new
+    obj._id = data["_id"]
     obj.player_even = data["player_even"]
     obj.player_odd = data["player_odd"]
     obj.turn = data["turn"]
@@ -72,7 +76,8 @@ class Game
         # 空セルのみチェック対象
         if @board[row][col] == nil then
           if check_available(row, col) then
-            prep.board[row][col] = get_cell_url(ENV["APP_HOST"], @_id, row, col)
+            url = Game.generate_cell_url(ENV["APP_HOST"], @_id, @turn, row, col)
+            prep.board[row][col] = "<a href='#{url}'>□</a>"
           else
             prep.board[row][col] = ""
           end
@@ -94,8 +99,21 @@ class Game
     prep
   end
 
-  private def get_cell_url(host, obj_id, row, col)
-    "<a href='#{host}/event?obj_id=#{obj_id}&row=#{row}&col=#{col}'>□</a>"
+  def self.generate_cell_url(host, obj_id, turn, row, col)
+    "#{host}/event?obj_id=#{obj_id}&turn=#{turn}&row=#{row}&col=#{col}"
+  end
+
+  def self.parse_cell_url(url)
+    data = {}
+    uri = URI.parse(url)
+    uri.query.split('&').each {|q|
+      kv = q.split('=')
+      data[kv[0]] = kv[1]
+    }
+    data['turn'] = data['turn'].to_i
+    data['row'] = data['row'].to_i
+    data['col'] = data['col'].to_i
+    data
   end
 
   def check_available(row, col)
@@ -171,6 +189,64 @@ class Game
     end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
     # 盤をはみ出したらおしまい
     false
+  end
+
+  def handle_turn(row, col)
+    is_even = (turn % 2 == 0)
+    if is_even then
+      pebble = :w
+    else
+      pebble = :b
+    end
+    # クリックした場所に石を置く
+    @board[row][col] = pebble
+    # ひっくり返す
+    reverse(row, col, pebble)
+    # 歴史を刻む
+    @history.push("#{pebble.to_s}_#{row}_#{col}")
+    # ターンを進める
+    @turn += 1
+    self
+  end
+
+  def reverse(row, col, pebble)
+    puts "reverse0"
+    reverse_loop(row, col, pebble, -1, 0) if check_loop(row, col, -1, 0)  # 上
+    puts "reverse1"
+    reverse_loop(row, col, pebble, -1, 1) if check_loop(row, col, -1, 1)  # 上右
+    puts "reverse2"
+    reverse_loop(row, col, pebble,  0, 1) if check_loop(row, col,  0, 1)  # 　右
+    puts "reverse3"
+    reverse_loop(row, col, pebble,  1, 1) if check_loop(row, col,  1, 1)  # 下右
+    puts "reverse4"
+    reverse_loop(row, col, pebble,  1, 0) if check_loop(row, col,  1, 0)  # 下
+    puts "reverse5"
+    reverse_loop(row, col, pebble,  1,-1) if check_loop(row, col,  1,-1)  # 下左
+    puts "reverse6"
+    reverse_loop(row, col, pebble,  0,-1) if check_loop(row, col,  0,-1)  # 　左
+    puts "reverse7"
+    reverse_loop(row, col, pebble, -1,-1) if check_loop(row, col, -1,-1)  # 上左
+    puts "reverse8"
+  end
+
+  def reverse_loop(st_row, st_col, pebble, delta_row, delta_col)
+    i = 0
+    begin
+      # ターゲットセル移動
+      i += 1
+      tg_row = st_row + delta_row * i
+      tg_col = st_col + delta_col * i
+
+      break if tg_row < 0
+      break if tg_col < 0
+      break if tg_row > 7
+      break if tg_col > 7
+      break if @board[tg_row][tg_col] == pebble
+
+      @board[tg_row][tg_col] = pebble
+
+      # 盤をはみ出すまでチェック
+    end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
   end
 
 end

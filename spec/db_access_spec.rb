@@ -28,12 +28,51 @@ describe "DbAccess" do
     end
   end
 
+  describe "update" do
+    it "存在しない場合の更新検査" do
+      game = Game.new
+      dba = DbAccess.new
+      dba.dropAll
+      ret = dba.update(game)
+      ret['n'].should == 0
+    end
+
+    it "存在する場合の更新検査" do
+      game = Game.new
+      dba = DbAccess.new
+      dba.dropAll
+      ret = dba.insert(game)
+      game.player_odd = "odd@address.com"
+      game.player_even = "even@address.com"
+      game.turn = 2
+      game.board[0][0] = :w
+      game.history.push("w_0_0")
+      dba.update(game)
+
+      actual = dba.find("odd@address.com", "even@address.com")
+      actual._id.class.should == BSON::ObjectId
+      actual.player_odd.should == "odd@address.com"
+      actual.player_even.should == "even@address.com"
+      actual.turn.should == 2
+      actual.board[0][0].should == :w
+      actual.history[0].should == "w_0_0"
+    end
+  end
+
   describe "findById" do
     it "存在しないIDによる検査" do
       dba = DbAccess.new
       dba.dropAll
-      actual = dba.findById("000")
+      actual = dba.findById(BSON::ObjectId.from_string("53e317befe1c1d2b39000001"))
       actual.should == nil
+    end
+    it "存在するIDによる検査" do
+      dba = DbAccess.new
+      dba.dropAll
+      game = Game.new
+      expect_id = dba.insert(game)
+      actual = dba.findById(expect_id)
+      actual._id.should == expect_id
     end
   end
 
