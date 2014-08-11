@@ -71,15 +71,22 @@ post '/event' do
           logger.info "Could not find valid game. The event was ignored."
           break
         end
+        if game.turn != event_data['turn'] then
+          logger.info "Invalid turn event."
+          break;
+        end
         # handle turn
         game = game.handle_turn(event_data['row'], event_data['col'])
         # save the game
         dba.update(game)
 
         mailer = Mailer.new
-        mailer.send(game)
         if game.is_finish then
-          # TODO send email for each player
+          mailer.send_board(game.player_odd, game)
+          mailer.send_board(game.player_even, game)
+          dba.remove(game._id)
+        else
+          mailer.send(game)
         end
       rescue => e
         logger.warn e.backtrace

@@ -27,7 +27,7 @@ describe "Mailer" do
   end
 
   describe "send_board" do
-    it "ボードメール送信検査" do
+    it "未完了ボードメール送信検査" do
       game = Game.new
       game.player_even = "wataru@kke.co.jp"
       game.player_odd = "awwa500@gmail.com"
@@ -39,5 +39,21 @@ describe "Mailer" do
       mailer = Mailer.new
       mailer.send_board(game.player_even, game)
     end
+
+    it "完了ボードメール送信検査" do
+      game = Game.new
+      game.player_even = "wataru@kke.co.jp"
+      game.player_odd = "awwa500@gmail.com"
+      game.turn = 1
+      game.board[0][0] = :w
+      game.board[0][1] = :b
+      game.history.push("b_0_1")
+      game.history.push("pass")
+      game.history.push("pass")
+
+      mailer = Mailer.new
+      mailer.send_board(game.player_even, game)
+    end
+
   end
 end

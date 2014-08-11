@@ -140,6 +140,29 @@ describe "DbAccess" do
       actual1 = dba.find("odd1@address.com", "even2@address.com")
       actual1.should == nil
     end
+  end
 
+  describe "remove" do
+    it "存在するID指定削除検査" do
+      dba = DbAccess.new
+      dba.dropAll
+
+      game = Game.new
+      expect_id = dba.insert(game)
+      res = dba.remove(expect_id)
+      res["ok"].should == 1
+      res["n"].should == 1
+    end
+
+    it "存在しないID指定削除検査" do
+      dba = DbAccess.new
+      dba.dropAll
+
+      game = Game.new
+      expect_id = dba.insert(game)
+      res = dba.remove(BSON::ObjectId.from_string("000000000000000000000000"))
+      res["ok"].should == 1
+      res["n"].should == 0
+    end
   end
 end

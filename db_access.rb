@@ -34,6 +34,10 @@ class DbAccess
     nil
   end
 
+  def remove(id)
+    @coll.remove({:_id => id})
+  end
+
   def dropAll
     @coll.drop
   end

@@ -4,7 +4,7 @@ require 'uri'
 
 class Game
 
-  attr_accessor :_id,:player_even, :player_odd, :turn, :board, :history, :pass_url
+  attr_accessor :_id,:player_even, :player_odd, :turn, :board, :history, :pass_url, :p_board, :p_links
 
   #  0 1 2 3 4 5 6 7
   #0
@@ -26,6 +26,7 @@ class Game
     @board[4][3] = :b
     @board[4][4] = :w
     @history = []
+    @p_links = {}
   end
 
   def to_array
@@ -57,6 +58,7 @@ class Game
     prep.player_odd = @player_odd
     prep.turn = @turn
     prep.pass_url = Game.generate_cell_url(app_host, @_id, @turn, -1, -1)
+    prep.p_board = Array.new(8).map{Array.new(8,nil)}
 
     # Embed Link tag
     for row in 0..7 do
@@ -66,8 +68,11 @@ class Game
           if is_available_cell(row, col) then
             url = Game.generate_cell_url(app_host, @_id, @turn, row, col)
             prep.board[row][col] = "<a href='#{url}'><img style='width: 100%;' src='#{app_host}/n.png'></a>"
+            prep.p_board[row][col] = "*"
+            prep.p_links.store(Game.conv_plain_coord(row,col), url)
           else
-            prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/n.png'>"
+            prep.board[row][col] = get_img_tag(app_host, "n.png")
+            prep.p_board[row][col] = "　"
           end
         end
       end
@@ -78,13 +83,21 @@ class Game
       for col in 0..7 do
         case @board[row][col]
         when :b then
-          prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/b.png'>"
+          prep.board[row][col] = get_img_tag(app_host, "b.png")
+          prep.p_board[row][col] = "●"
         when :w then
-          prep.board[row][col] = "<img style='width: 100%;' src='#{app_host}/w.png'>"
+          prep.board[row][col] = get_img_tag(app_host, "w.png")
+          prep.p_board[row][col] = "○"
         end
       end
     end
     prep
+  end
+
+  def self.conv_plain_coord(row, col)
+    p_row = ["1", "2", "3", "4", "5", "6", "7", "8"]
+    p_col = ["A", "B", "C", "D", "E", "F", "G", "H"]
+    "#{p_col[col]}#{p_row[row]}"
   end
 
   def self.generate_cell_url(host, obj_id, turn, row, col)
@@ -207,6 +220,26 @@ class Game
 
       # until end of board
     end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
+  end
+
+  def get_count
+    count_b = 0
+    count_w = 0
+    for row in 0..7 do
+      for col in 0..7 do
+        case @board[row][col]
+        when :b then
+          count_b += 1
+        when :w then
+          count_w += 1
+        end
+      end
+    end
+    {:b => count_b, :w => count_w}
+  end
+
+  def get_img_tag(app_host, file)
+    "<img style='width: 100%;' src='#{app_host}/#{file}'>"
   end
 
   module Dir

@@ -81,6 +81,19 @@ describe "Game" do
       prep.board[0][3].should == "<img style='width: 100%;' src='http://test.com/n.png'>"
       prep.board[3][3].should == "<img style='width: 100%;' src='http://test.com/w.png'>"
       prep.board[3][4].should == "<img style='width: 100%;' src='http://test.com/b.png'>"
+      prep.p_links.length.should == 5
+      prep.p_links["C1"][0,7].should == "http://"
+      prep.p_links["E3"][0,7].should == "http://"
+      prep.p_links["F4"][0,7].should == "http://"
+      prep.p_links["C5"][0,7].should == "http://"
+      prep.p_links["D6"][0,7].should == "http://"
+    end
+  end
+
+  describe "conv_plain_coord" do
+    it "plain/text用座標変換処理検査" do
+      Game.conv_plain_coord(1, 2).should == "C2"
+
     end
   end
 
@@ -666,6 +679,16 @@ describe "Game" do
         end
       end
       game.is_finish.should == true
+    end
+  end
+
+  describe "get_count" do
+    it "石の数検査" do
+      game = Game.new
+      game.board[0][0] = :w
+      game.board[0][1] = :b
+      game.get_count[:b].should == 3
+      game.get_count[:w].should == 3
     end
   end
 
