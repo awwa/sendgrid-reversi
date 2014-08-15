@@ -1,16 +1,16 @@
 # encoding: utf-8
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "DbAccess" do
+describe "GameCollection" do
   describe "initialize" do
     it "初期値検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
     end
   end
 
   describe "dropAll" do
     it "全削除検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
     end
   end
@@ -18,7 +18,7 @@ describe "DbAccess" do
   describe "insert" do
     it "挿入検査" do
       game = Game.new
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
       id = dba.insert(game)
       id.class.name.should == "BSON::ObjectId"
@@ -31,7 +31,7 @@ describe "DbAccess" do
   describe "update" do
     it "存在しない場合の更新検査" do
       game = Game.new
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
       ret = dba.update(game)
       ret['n'].should == 0
@@ -39,7 +39,7 @@ describe "DbAccess" do
 
     it "存在する場合の更新検査" do
       game = Game.new
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
       ret = dba.insert(game)
       game.player_odd = "odd@address.com"
@@ -61,13 +61,13 @@ describe "DbAccess" do
 
   describe "findById" do
     it "存在しないIDによる検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
       actual = dba.findById(BSON::ObjectId.from_string("53e317befe1c1d2b39000001"))
       actual.should == nil
     end
     it "存在するIDによる検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
       game = Game.new
       expect_id = dba.insert(game)
@@ -78,7 +78,7 @@ describe "DbAccess" do
 
   describe "find" do
     it "正常なplayerによる検索" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
 
       game1 = Game.new
@@ -100,7 +100,7 @@ describe "DbAccess" do
     end
 
     it "逆順playerによる検索" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
 
       game1 = Game.new
@@ -122,7 +122,7 @@ describe "DbAccess" do
     end
 
     it "存在しないplayerによる検索" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
 
       game1 = Game.new
@@ -144,7 +144,7 @@ describe "DbAccess" do
 
   describe "remove" do
     it "存在するID指定削除検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
 
       game = Game.new
@@ -155,7 +155,7 @@ describe "DbAccess" do
     end
 
     it "存在しないID指定削除検査" do
-      dba = DbAccess.new
+      dba = GameCollection.new
       dba.dropAll
 
       game = Game.new

@@ -1,0 +1,19 @@
+SendGrid Reversi
+#p_finish#
+#count_b# #name_b# #pb# vs #pw# #name_w# #count_w#
+  A B C D E F G H
+1 #p00# #p01# #p02# #p03# #p04# #p05# #p06# #p07#
+2 #p10# #p11# #p12# #p13# #p14# #p15# #p16# #p17#
+3 #p20# #p21# #p22# #p23# #p24# #p25# #p26# #p27#
+4 #p30# #p31# #p32# #p33# #p34# #p35# #p36# #p37#
+5 #p40# #p41# #p42# #p43# #p44# #p45# #p46# #p47#
+6 #p50# #p51# #p52# #p53# #p54# #p55# #p56# #p57#
+7 #p60# #p61# #p62# #p63# #p64# #p65# #p66# #p67#
+8 #p70# #p71# #p72# #p73# #p74# #p75# #p76# #p77#
+
+* Available cells
+#links#
+
+pass #pass_url#
+
+<%body%>

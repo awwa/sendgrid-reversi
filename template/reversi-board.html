@@ -1,0 +1,109 @@
+<html>
+<head>
+	<title>SendGrid Reversi</title>
+</head>
+<body>
+<div style="padding: 2%; background-color: #eeeeee;">
+    #h_finish#
+    <div style="width: 90%; overflow: hidden; border-style: groove; border-color: #ff0000; margin-bottom: 1%; border-width: 2px; padding: 1%; box-shadow: 10px 10px 10px rgba(0,0,0,0.4);">
+        <p style="float: left; background-color: #ffde25; margin-right: 2%; padding: 0.5%; padding-left: 2%; padding-right: 2%;">#count_b#</p>
+        <p style="float: left; margin-right: 2%; padding: 0.5%;">#name_b#</p>
+        <div style="float: left; width: 12.3%; margin-right: 2%;">#b#</div>
+        <p style="float: left; background-color: #3d8a0a; margin-right: 2%; padding: 0.5%; padding-left: 2%; padding-right: 2%;">vs</p>
+        <div style="float: left; width: 12.3%; margin-right: 2%;">#w#</div>
+        <p style="float: left; margin-right: 2%; padding: 0.5%;">#name_w#</p>
+        <p style="float: left; background-color: #ffde25; margin-right: 2%; padding: 0.5%; padding-left: 2%; padding-right: 2%;">#count_w#</p>
+    </div>
+    <div style="overflow: hidden; width: 90%; background-color: #3d8a0a; padding: 2%; box-shadow: 10px 10px 10px rgba(0,0,0,0.4); margin-bottom: 2%;">
+        <div style="overflow: hidden; width: 100%; background-color: #000000; padding: 0.1%;">
+
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b00#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b01#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b02#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b03#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b04#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b05#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b06#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b07#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b10#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b11#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b12#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b13#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b14#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b15#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b16#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b17#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b20#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b21#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b22#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b23#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b24#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b25#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b26#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b27#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b30#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b31#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b32#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b33#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b34#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b35#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b36#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b37#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b40#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b41#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b42#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b43#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b44#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b45#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b46#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b47#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b50#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b51#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b52#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b53#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b54#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b55#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b56#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b57#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b60#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b61#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b62#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b63#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b64#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b65#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b66#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b67#</div>
+            </div>
+            <div style="clear: both;">
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b70#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b71#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b72#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b73#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b74#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b75#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b76#</div>
+                <div style="width: 12.3%; margin: 0.1%; background-color: #75a236; float: left;">#b77#</div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+    <a href="#pass_url#">Pass your turn</a>
+    <p sytle="float:top;"><%body%></p>
+</div>
+
+</body>
+</html>

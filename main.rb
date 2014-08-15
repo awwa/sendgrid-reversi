@@ -6,6 +6,11 @@ require './addresses'
 require './mailer'
 require './game'
 
+configure do
+  puts 'configure'
+
+end
+
 post '/game' do
   begin
     # parse email address from request

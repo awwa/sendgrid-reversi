@@ -2,11 +2,12 @@ require 'mongo'
 
 class DbAccess
 
-  def initialize
+  attr_accessor :db, :coll
+
+  def initialize(coll_name)
     @connection = Mongo::Connection.new('localhost') # TODO 環境変数にする
-    db = @connection.db('reversi')
-    @coll = db.collection('games')
-    @coll.create_index({:player_even => Mongo::ASCENDING, :player_odd => Mongo::ASCENDING}, {:unique => :true})
+    @db = @connection.db('reversi')
+    @coll = @db.collection(coll_name)
   end
 
   def insert(doc)
@@ -15,23 +16,6 @@ class DbAccess
 
   def update(doc)
     @coll.update({:_id => doc._id}, doc.to_array)
-  end
-
-  def findById(id)
-    row = @coll.find_one({:_id => id})
-    game = Game.create_new(row) if row != nil
-    game
-  end
-
-  def find(player_even, player_odd)
-    row = @coll.find_one(:player_even => player_even, :player_odd => player_odd)
-    game = Game.create_new(row) if row != nil
-    return game if game != nil
-
-    row = @coll.find_one(:player_even => player_odd, :player_odd => player_even)
-    game = Game.create_new(row) if row != nil
-    return game if game != nil
-    nil
   end
 
   def remove(id)

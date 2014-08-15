@@ -1,7 +1,6 @@
 require 'sendgrid_ruby'
 require 'sendgrid_ruby/version'
 require 'sendgrid_ruby/email'
-require 'dotenv'
 require 'logger'
 
 class Mailer
@@ -10,10 +9,7 @@ class Mailer
 
   def initialize
     @logger = Logger.new(STDOUT)
-    config = Dotenv.load
-    @username = ENV["SENDGRID_USERNAME"]
-    @password = ENV["SENDGRID_PASSWORD"]
-    @parse_address = ENV["PARSE_ADDRESS"]
+    @settings = Settings.new
   end
 
   def send(game)
@@ -42,25 +38,25 @@ class Mailer
   def send_message(to, message)
     email = SendgridRuby::Email.new
     email.add_to(to)
-    email.set_from(@parse_address)
+    email.set_from(@settings.parse_address)
     email.set_subject(SUBJECT)
     email.set_text(message)
     email.set_html(message)
     email.add_filter("templates", "enabled", 1)
     email.add_filter("templates", "template_id", ENV["TEMP_ID_MESSAGE"])
-    sendgrid = SendgridRuby::Sendgrid.new(@username, @password)
+    sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
     response = sendgrid.send(email)
     @logger.info "send_message: #{to}"
   end
 
   def send_board(to, game)
     # prepare game data
-    prep = game.to_prepared(ENV["APP_HOST"])
+    prep = game.to_prepared(@settings.app_host)
 
     # send email
     email = SendgridRuby::Email.new
     email.add_to(to)
-    email.set_from(@parse_address)
+    email.set_from(@settings.parse_address)
     email.set_subject(SUBJECT)
     email.set_text(" ")
     email.set_html(" ")
@@ -82,8 +78,8 @@ class Mailer
     end
     email.add_substitution("#name_b#", [name_b])
     email.add_substitution("#name_w#", [name_w])
-    email.add_substitution("#b#", [game.get_img_tag(ENV["APP_HOST"], "b.png")])
-    email.add_substitution("#w#", [game.get_img_tag(ENV["APP_HOST"], "w.png")])
+    email.add_substitution("#b#", [game.get_img_tag(@settings.app_host, "b.png")])
+    email.add_substitution("#w#", [game.get_img_tag(@settings.app_host, "w.png")])
     email.add_substitution("#h_finish#", [game.is_finish ? "<p style='width: 90%; background-color: #ff0000; color: #ffffff; padding: 1%;'>勝負あり</p>" : ""])
 
     # for plain text template
@@ -103,7 +99,7 @@ class Mailer
 
     email.add_filter("templates", "enabled", 1)
     email.add_filter("templates", "template_id", ENV["TEMP_ID_REVERSI"])
-    sendgrid = SendgridRuby::Sendgrid.new(@username, @password)
+    sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
     response = sendgrid.send(email)
     @logger.info "send_board: #{to}"
   end
