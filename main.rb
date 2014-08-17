@@ -1,14 +1,21 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
-require './db_access'
+require './game_collection'
 require './addresses'
 require './mailer'
 require './game'
+require './settings'
+require './configure'
 
-configure do
-  puts 'configure'
-
+configure :production do
+  begin
+    settings = Settings.new
+    Configure.init_sendgrid(settings)
+  rescue => e
+    puts e.backtrace
+    puts e.inspect
+  end
 end
 
 post '/game' do
@@ -30,7 +37,7 @@ post '/game' do
       return 'Fail to parse to and from address'
     end
     # get game data from DB
-    dba = DbAccess.new
+    dba = GameCollection.new
     game = dba.find(from, to)
     # create game data if not exist
     if game == nil then
@@ -62,7 +69,7 @@ post '/event' do
     data = JSON.parse(request.body.read)
     data.each{|event|
       begin
-        dba = DbAccess.new
+        dba = GameCollection.new
         # handle only click event
         next if event['event'] != "click"
         logger.info "got click event"

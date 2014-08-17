@@ -7,6 +7,7 @@ require File.join(File.dirname(__FILE__), '..', 'settings.rb')
 require File.join(File.dirname(__FILE__), '..', 'game_collection.rb')
 require File.join(File.dirname(__FILE__), '..', 'app_config.rb')
 require File.join(File.dirname(__FILE__), '..', 'app_config_collection.rb')
+require File.join(File.dirname(__FILE__), '..', 'configure.rb')
 
 require 'rubygems'
 require 'sinatra'

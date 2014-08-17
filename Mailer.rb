@@ -10,6 +10,8 @@ class Mailer
   def initialize
     @logger = Logger.new(STDOUT)
     @settings = Settings.new
+    dba = AppConfigCollection.new
+    @app_config = dba.find_one
   end
 
   def send(game)
@@ -43,7 +45,7 @@ class Mailer
     email.set_text(message)
     email.set_html(message)
     email.add_filter("templates", "enabled", 1)
-    email.add_filter("templates", "template_id", ENV["TEMP_ID_MESSAGE"])
+    email.add_filter("templates", "template_id", @app_config.template_id_message)
     sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
     response = sendgrid.send(email)
     @logger.info "send_message: #{to}"
@@ -98,7 +100,7 @@ class Mailer
     email.add_substitution("#links#", [links])
 
     email.add_filter("templates", "enabled", 1)
-    email.add_filter("templates", "template_id", ENV["TEMP_ID_REVERSI"])
+    email.add_filter("templates", "template_id", @app_config.template_id_board)
     sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
     response = sendgrid.send(email)
     @logger.info "send_board: #{to}"

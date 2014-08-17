@@ -15,7 +15,7 @@ describe "Main" do
         should be_ok
       end
       it "Fail to parse to and from addressと出力されること" do
-        subject.body.should == 'Fail to parse to and from address'
+        expect(subject.body).to eq('Fail to parse to and from address')
       end
     end
   end

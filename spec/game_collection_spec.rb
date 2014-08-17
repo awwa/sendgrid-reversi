@@ -21,10 +21,10 @@ describe "GameCollection" do
       dba = GameCollection.new
       dba.dropAll
       id = dba.insert(game)
-      id.class.name.should == "BSON::ObjectId"
+      expect(id.class.name).to eq("BSON::ObjectId")
       gameActual = dba.findById(id)
-      gameActual.player_odd.should == ""
-      gameActual.player_even.should == ""
+      expect(gameActual.player_odd).to eq("")
+      expect(gameActual.player_even).to eq("")
     end
   end
 
@@ -34,7 +34,7 @@ describe "GameCollection" do
       dba = GameCollection.new
       dba.dropAll
       ret = dba.update(game)
-      ret['n'].should == 0
+      expect(ret['n']).to eq(0)
     end
 
     it "存在する場合の更新検査" do
@@ -50,12 +50,12 @@ describe "GameCollection" do
       dba.update(game)
 
       actual = dba.find("odd@address.com", "even@address.com")
-      actual._id.class.should == BSON::ObjectId
-      actual.player_odd.should == "odd@address.com"
-      actual.player_even.should == "even@address.com"
-      actual.turn.should == 2
-      actual.board[0][0].should == :w
-      actual.history[0].should == "w_0_0"
+      expect(actual._id.class).to eq(BSON::ObjectId)
+      expect(actual.player_odd).to eq("odd@address.com")
+      expect(actual.player_even).to eq("even@address.com")
+      expect(actual.turn).to eq(2)
+      expect(actual.board[0][0]).to eq(:w)
+      expect(actual.history[0]).to eq("w_0_0")
     end
   end
 
@@ -64,7 +64,7 @@ describe "GameCollection" do
       dba = GameCollection.new
       dba.dropAll
       actual = dba.findById(BSON::ObjectId.from_string("53e317befe1c1d2b39000001"))
-      actual.should == nil
+      expect(actual).to eq(nil)
     end
     it "存在するIDによる検査" do
       dba = GameCollection.new
@@ -72,7 +72,7 @@ describe "GameCollection" do
       game = Game.new
       expect_id = dba.insert(game)
       actual = dba.findById(expect_id)
-      actual._id.should == expect_id
+      expect(actual._id).to eq(expect_id)
     end
   end
 
@@ -94,9 +94,9 @@ describe "GameCollection" do
       id2 = dba.insert(game2)
 
       actual1 = dba.find("even1@address.com", "odd1@address.com")
-      actual1.class.should == Game
-      actual1.player_even = "even1@address.com"
-      actual1.player_odd = "odd1@address.com"
+      expect(actual1.class).to eq(Game)
+      expect(actual1.player_even).to eq("even1@address.com")
+      expect(actual1.player_odd).to eq("odd1@address.com")
     end
 
     it "逆順playerによる検索" do
@@ -116,9 +116,9 @@ describe "GameCollection" do
       id2 = dba.insert(game2)
 
       actual1 = dba.find("odd1@address.com", "even1@address.com")
-      actual1.class.should == Game
-      actual1.player_even = "even1@address.com"
-      actual1.player_odd = "odd1@address.com"
+      expect(actual1.class).to eq(Game)
+      expect(actual1.player_even).to eq("even1@address.com")
+      expect(actual1.player_odd).to eq("odd1@address.com")
     end
 
     it "存在しないplayerによる検索" do
@@ -138,7 +138,7 @@ describe "GameCollection" do
       id2 = dba.insert(game2)
 
       actual1 = dba.find("odd1@address.com", "even2@address.com")
-      actual1.should == nil
+      expect(actual1).to eq(nil)
     end
   end
 
@@ -150,8 +150,8 @@ describe "GameCollection" do
       game = Game.new
       expect_id = dba.insert(game)
       res = dba.remove(expect_id)
-      res["ok"].should == 1
-      res["n"].should == 1
+      expect(res["ok"]).to eq(1)
+      expect(res["n"]).to eq(1)
     end
 
     it "存在しないID指定削除検査" do
@@ -161,8 +161,8 @@ describe "GameCollection" do
       game = Game.new
       expect_id = dba.insert(game)
       res = dba.remove(BSON::ObjectId.from_string("000000000000000000000000"))
-      res["ok"].should == 1
-      res["n"].should == 0
+      expect(res["ok"]).to eq(1)
+      expect(res["n"]).to eq(0)
     end
   end
 end

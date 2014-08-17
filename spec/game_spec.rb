@@ -6,18 +6,18 @@ describe "Game" do
   describe "initialize" do
     it "初期値検査" do
       game = Game.new
-      game.player_even.should == ""
-      game.player_odd.should == ""
-      game.turn.should == 1
-      game.board[0][0].should == nil
-      game.board[7][7].should == nil
-      game.board[3][3].should == :w
-      game.board[3][4].should == :b
-      game.board[4][3].should == :b
-      game.board[4][4].should == :w
-      game.board.length.should == 8
-      game.board[0].length.should == 8
-      game.history.length.should == 0
+      expect(game.player_even).to eq("")
+      expect(game.player_odd).to eq("")
+      expect(game.turn).to eq(1)
+      expect(game.board[0][0]).to eq(nil)
+      expect(game.board[7][7]).to eq(nil)
+      expect(game.board[3][3]).to eq(:w)
+      expect(game.board[3][4]).to eq(:b)
+      expect(game.board[4][3]).to eq(:b)
+      expect(game.board[4][4]).to eq(:w)
+      expect(game.board.length).to eq(8)
+      expect(game.board[0].length).to eq(8)
+      expect(game.history.length).to eq(0)
     end
   end
 
@@ -32,31 +32,31 @@ describe "Game" do
       game.history.push("b_0_1")
 
       actual = game.to_array
-      actual["player_even"].should == "even@address.com"
-      actual["player_odd"].should == "odd@address.com"
-      actual["turn"].should == 100
-      actual["board"][0][0].should == :w
-      actual["board"][0][1].should == :b
-      actual["history"][0].should == "b_0_1"
+      expect(actual["player_even"]).to eq("even@address.com")
+      expect(actual["player_odd"]).to eq("odd@address.com")
+      expect(actual["turn"]).to eq(100)
+      expect(actual["board"][0][0]).to eq(:w)
+      expect(actual["board"][0][1]).to eq(:b)
+      expect(actual["history"][0]).to eq("b_0_1")
     end
   end
 
   describe "generate_cell_url" do
     it "セルURL生成検査" do
-      Game.generate_cell_url("https://test.com", "12345", 222, 4, 5).should == "https://test.com/event?obj_id=12345&turn=222&row=4&col=5"
+      expect(Game.generate_cell_url("https://test.com", "12345", 222, 4, 5)).to eq( "https://test.com/event?obj_id=12345&turn=222&row=4&col=5")
     end
     it "パスURL生成検査" do
-      Game.generate_cell_url("https://test.com", "12345", 222, -1, -1).should == "https://test.com/event?obj_id=12345&turn=222&row=-1&col=-1"
+      expect(Game.generate_cell_url("https://test.com", "12345", 222, -1, -1)).to eq( "https://test.com/event?obj_id=12345&turn=222&row=-1&col=-1")
     end
   end
 
   describe "parse_cell_url" do
     it "セルURL解析検査" do
       data = Game.parse_cell_url("https://test.com/event?obj_id=12345&turn=222&row=4&col=5")
-      data['obj_id'].should == "12345"
-      data['turn'].should == 222
-      data['row'].should == 4
-      data['col'].should == 5
+      expect(data['obj_id']).to eq("12345")
+      expect(data['turn']).to eq(222)
+      expect(data['row']).to eq(4)
+      expect(data['col']).to eq(5)
     end
   end
 
@@ -71,29 +71,28 @@ describe "Game" do
       game.history.push("b_0_1")
 
       prep = game.to_prepared("http://test.com")
-      prep.player_even.should == "even@address.com"
-      prep.player_odd.should == "odd@address.com"
-      prep.turn.should == 100
-      prep.pass_url[0,29].should == "http://test.com/event?obj_id="
-      prep.board[0][0].should == "<img style='width: 100%;' src='http://test.com/w.png'>"
-      prep.board[0][1].should == "<img style='width: 100%;' src='http://test.com/b.png'>"
-      prep.board[0][2][0,7].should == "<a href"
-      prep.board[0][3].should == "<img style='width: 100%;' src='http://test.com/n.png'>"
-      prep.board[3][3].should == "<img style='width: 100%;' src='http://test.com/w.png'>"
-      prep.board[3][4].should == "<img style='width: 100%;' src='http://test.com/b.png'>"
-      prep.p_links.length.should == 5
-      prep.p_links["C1"][0,7].should == "http://"
-      prep.p_links["E3"][0,7].should == "http://"
-      prep.p_links["F4"][0,7].should == "http://"
-      prep.p_links["C5"][0,7].should == "http://"
-      prep.p_links["D6"][0,7].should == "http://"
+      expect(prep.player_even).to eq("even@address.com")
+      expect(prep.player_odd).to eq("odd@address.com")
+      expect(prep.turn).to eq(100)
+      expect(prep.pass_url[0,29]).to eq("http://test.com/event?obj_id=")
+      expect(prep.board[0][0]).to eq("<img style='width: 100%;' src='http://test.com/w.png'>")
+      expect(prep.board[0][1]).to eq("<img style='width: 100%;' src='http://test.com/b.png'>")
+      expect(prep.board[0][2][0,7]).to eq("<a href")
+      expect(prep.board[0][3]).to eq("<img style='width: 100%;' src='http://test.com/n.png'>")
+      expect(prep.board[3][3]).to eq("<img style='width: 100%;' src='http://test.com/w.png'>")
+      expect(prep.board[3][4]).to eq("<img style='width: 100%;' src='http://test.com/b.png'>")
+      expect(prep.p_links.length).to eq(5)
+      expect(prep.p_links["C1"][0,7]).to eq("http://")
+      expect(prep.p_links["E3"][0,7]).to eq("http://")
+      expect(prep.p_links["F4"][0,7]).to eq("http://")
+      expect(prep.p_links["C5"][0,7]).to eq("http://")
+      expect(prep.p_links["D6"][0,7]).to eq("http://")
     end
   end
 
   describe "conv_plain_coord" do
     it "plain/text用座標変換処理検査" do
-      Game.conv_plain_coord(1, 2).should == "C2"
-
+      expect(Game.conv_plain_coord(1, 2)).to eq("C2")
     end
   end
 
@@ -114,14 +113,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(0, 2, Game::Dir::UP).should          == false
-      game.is_available_dir(0, 2, Game::Dir::UP_RIGHT).should    == false
-      game.is_available_dir(0, 2, Game::Dir::RIGHT).should       == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN_RIGHT).should  == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN).should        == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN_LEFT).should   == false
-      game.is_available_dir(0, 2, Game::Dir::LEFT).should        == true
-      game.is_available_dir(0, 2, Game::Dir::UP_LEFT).should     == false
+      expect(game.is_available_dir(0, 2, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::LEFT)).to       eq(true)
+      expect(game.is_available_dir(0, 2, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -139,14 +138,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 3, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 3, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 3, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 3, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 3, Game::Dir::DOWN).should       == false
-      game.is_available_dir(2, 3, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 3, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 3, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 3, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -164,14 +163,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 4, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 4, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 4, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 4, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 4, Game::Dir::DOWN).should       == true
-      game.is_available_dir(2, 4, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 4, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 4, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 4, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN)).to       eq(true)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -189,14 +188,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 5, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 5, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 5, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN).should       == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 5, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 5, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 5, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -214,14 +213,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(0, 2, Game::Dir::UP).should         == false
-      game.is_available_dir(0, 2, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(0, 2, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN).should       == false
-      game.is_available_dir(0, 2, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(0, 2, Game::Dir::LEFT).should       == false
-      game.is_available_dir(0, 2, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(0, 2, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(0, 2, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -239,14 +238,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 3, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 3, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 3, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 3, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 3, Game::Dir::DOWN).should       == true
-      game.is_available_dir(2, 3, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 3, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 3, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 3, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN)).to       eq(true)
+      expect(game.is_available_dir(2, 3, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 3, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -264,14 +263,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 4, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 4, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 4, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 4, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 4, Game::Dir::DOWN).should       == false
-      game.is_available_dir(2, 4, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 4, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 4, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 4, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 4, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -289,14 +288,14 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_dir(2, 5, Game::Dir::UP).should         == false
-      game.is_available_dir(2, 5, Game::Dir::UP_RIGHT).should   == false
-      game.is_available_dir(2, 5, Game::Dir::RIGHT).should      == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN_RIGHT).should == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN).should       == false
-      game.is_available_dir(2, 5, Game::Dir::DOWN_LEFT).should  == false
-      game.is_available_dir(2, 5, Game::Dir::LEFT).should       == false
-      game.is_available_dir(2, 5, Game::Dir::UP_LEFT).should    == false
+      expect(game.is_available_dir(2, 5, Game::Dir::UP)).to         eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::UP_RIGHT)).to   eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::RIGHT)).to      eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN_RIGHT)).to eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN)).to       eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::DOWN_LEFT)).to  eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::LEFT)).to       eq(false)
+      expect(game.is_available_dir(2, 5, Game::Dir::UP_LEFT)).to    eq(false)
     end
 
   end
@@ -318,75 +317,75 @@ describe "Game" do
       game.board[0][0] = :w
       game.board[0][1] = :b
 
-      game.is_available_cell(0, 2).should == true
-      game.is_available_cell(0, 3).should == false
-      game.is_available_cell(0, 4).should == false
-      game.is_available_cell(0, 5).should == false
-      game.is_available_cell(0, 6).should == false
-      game.is_available_cell(0, 7).should == false
+      expect(game.is_available_cell(0, 2)).to eq(true)
+      expect(game.is_available_cell(0, 3)).to eq(false)
+      expect(game.is_available_cell(0, 4)).to eq(false)
+      expect(game.is_available_cell(0, 5)).to eq(false)
+      expect(game.is_available_cell(0, 6)).to eq(false)
+      expect(game.is_available_cell(0, 7)).to eq(false)
 
-      game.is_available_cell(1, 0).should == false
-      game.is_available_cell(1, 1).should == false
-      game.is_available_cell(1, 2).should == false
-      game.is_available_cell(1, 3).should == false
-      game.is_available_cell(1, 4).should == false
-      game.is_available_cell(1, 5).should == false
-      game.is_available_cell(1, 6).should == false
-      game.is_available_cell(1, 7).should == false
+      expect(game.is_available_cell(1, 0)).to eq(false)
+      expect(game.is_available_cell(1, 1)).to eq(false)
+      expect(game.is_available_cell(1, 2)).to eq(false)
+      expect(game.is_available_cell(1, 3)).to eq(false)
+      expect(game.is_available_cell(1, 4)).to eq(false)
+      expect(game.is_available_cell(1, 5)).to eq(false)
+      expect(game.is_available_cell(1, 6)).to eq(false)
+      expect(game.is_available_cell(1, 7)).to eq(false)
 
-      game.is_available_cell(2, 0).should == false
-      game.is_available_cell(2, 1).should == false
-      game.is_available_cell(2, 2).should == false
-      game.is_available_cell(2, 3).should == false
-      game.is_available_cell(2, 4).should == true
-      game.is_available_cell(2, 5).should == false
-      game.is_available_cell(2, 6).should == false
-      game.is_available_cell(2, 7).should == false
+      expect(game.is_available_cell(2, 0)).to eq(false)
+      expect(game.is_available_cell(2, 1)).to eq(false)
+      expect(game.is_available_cell(2, 2)).to eq(false)
+      expect(game.is_available_cell(2, 3)).to eq(false)
+      expect(game.is_available_cell(2, 4)).to eq(true)
+      expect(game.is_available_cell(2, 5)).to eq(false)
+      expect(game.is_available_cell(2, 6)).to eq(false)
+      expect(game.is_available_cell(2, 7)).to eq(false)
 
-      game.is_available_cell(3, 0).should == false
-      game.is_available_cell(3, 1).should == false
-      game.is_available_cell(3, 2).should == false
-      #game.is_available_cell(3, 3).should == false
-      #game.is_available_cell(3, 4).should == true
-      game.is_available_cell(3, 5).should == true
-      game.is_available_cell(3, 6).should == false
-      game.is_available_cell(3, 7).should == false
+      expect(game.is_available_cell(3, 0)).to eq(false)
+      expect(game.is_available_cell(3, 1)).to eq(false)
+      expect(game.is_available_cell(3, 2)).to eq(false)
+      #expect(game.is_available_cell(3, 3)).to eq(false)
+      #expect(game.is_available_cell(3, 4)).to eq(true)
+      expect(game.is_available_cell(3, 5)).to eq(true)
+      expect(game.is_available_cell(3, 6)).to eq(false)
+      expect(game.is_available_cell(3, 7)).to eq(false)
 
-      game.is_available_cell(4, 0).should == false
-      game.is_available_cell(4, 1).should == false
-      game.is_available_cell(4, 2).should == true
-      #game.is_available_cell(4, 3).should == false
-      #game.is_available_cell(4, 4).should == true
-      game.is_available_cell(4, 5).should == false
-      game.is_available_cell(4, 6).should == false
-      game.is_available_cell(4, 7).should == false
+      expect(game.is_available_cell(4, 0)).to eq(false)
+      expect(game.is_available_cell(4, 1)).to eq(false)
+      expect(game.is_available_cell(4, 2)).to eq(true)
+      #expect(game.is_available_cell(4, 3)).to eq(false)
+      #expect(game.is_available_cell(4, 4)).to eq(true)
+      expect(game.is_available_cell(4, 5)).to eq(false)
+      expect(game.is_available_cell(4, 6)).to eq(false)
+      expect(game.is_available_cell(4, 7)).to eq(false)
 
-      game.is_available_cell(5, 0).should == false
-      game.is_available_cell(5, 1).should == false
-      game.is_available_cell(5, 2).should == false
-      game.is_available_cell(5, 3).should == true
-      game.is_available_cell(5, 4).should == false
-      game.is_available_cell(5, 5).should == false
-      game.is_available_cell(5, 6).should == false
-      game.is_available_cell(5, 7).should == false
+      expect(game.is_available_cell(5, 0)).to eq(false)
+      expect(game.is_available_cell(5, 1)).to eq(false)
+      expect(game.is_available_cell(5, 2)).to eq(false)
+      expect(game.is_available_cell(5, 3)).to eq(true)
+      expect(game.is_available_cell(5, 4)).to eq(false)
+      expect(game.is_available_cell(5, 5)).to eq(false)
+      expect(game.is_available_cell(5, 6)).to eq(false)
+      expect(game.is_available_cell(5, 7)).to eq(false)
 
-      game.is_available_cell(6, 0).should == false
-      game.is_available_cell(6, 1).should == false
-      game.is_available_cell(6, 2).should == false
-      game.is_available_cell(6, 3).should == false
-      game.is_available_cell(6, 4).should == false
-      game.is_available_cell(6, 5).should == false
-      game.is_available_cell(6, 6).should == false
-      game.is_available_cell(6, 7).should == false
+      expect(game.is_available_cell(6, 0)).to eq(false)
+      expect(game.is_available_cell(6, 1)).to eq(false)
+      expect(game.is_available_cell(6, 2)).to eq(false)
+      expect(game.is_available_cell(6, 3)).to eq(false)
+      expect(game.is_available_cell(6, 4)).to eq(false)
+      expect(game.is_available_cell(6, 5)).to eq(false)
+      expect(game.is_available_cell(6, 6)).to eq(false)
+      expect(game.is_available_cell(6, 7)).to eq(false)
 
-      game.is_available_cell(7, 0).should == false
-      game.is_available_cell(7, 1).should == false
-      game.is_available_cell(7, 2).should == false
-      game.is_available_cell(7, 3).should == false
-      game.is_available_cell(7, 4).should == false
-      game.is_available_cell(7, 5).should == false
-      game.is_available_cell(7, 6).should == false
-      game.is_available_cell(7, 7).should == false
+      expect(game.is_available_cell(7, 0)).to eq(false)
+      expect(game.is_available_cell(7, 1)).to eq(false)
+      expect(game.is_available_cell(7, 2)).to eq(false)
+      expect(game.is_available_cell(7, 3)).to eq(false)
+      expect(game.is_available_cell(7, 4)).to eq(false)
+      expect(game.is_available_cell(7, 5)).to eq(false)
+      expect(game.is_available_cell(7, 6)).to eq(false)
+      expect(game.is_available_cell(7, 7)).to eq(false)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -406,75 +405,75 @@ describe "Game" do
 
 
 
-      game.is_available_cell(0, 2).should == false
-      game.is_available_cell(0, 3).should == false
-      game.is_available_cell(0, 4).should == false
-      game.is_available_cell(0, 5).should == false
-      game.is_available_cell(0, 6).should == false
-      game.is_available_cell(0, 7).should == false
+      expect(game.is_available_cell(0, 2)).to eq(false)
+      expect(game.is_available_cell(0, 3)).to eq(false)
+      expect(game.is_available_cell(0, 4)).to eq(false)
+      expect(game.is_available_cell(0, 5)).to eq(false)
+      expect(game.is_available_cell(0, 6)).to eq(false)
+      expect(game.is_available_cell(0, 7)).to eq(false)
 
-      game.is_available_cell(1, 0).should == false
-      game.is_available_cell(1, 1).should == false
-      game.is_available_cell(1, 2).should == false
-      game.is_available_cell(1, 3).should == false
-      game.is_available_cell(1, 4).should == false
-      game.is_available_cell(1, 5).should == false
-      game.is_available_cell(1, 6).should == false
-      game.is_available_cell(1, 7).should == false
+      expect(game.is_available_cell(1, 0)).to eq(false)
+      expect(game.is_available_cell(1, 1)).to eq(false)
+      expect(game.is_available_cell(1, 2)).to eq(false)
+      expect(game.is_available_cell(1, 3)).to eq(false)
+      expect(game.is_available_cell(1, 4)).to eq(false)
+      expect(game.is_available_cell(1, 5)).to eq(false)
+      expect(game.is_available_cell(1, 6)).to eq(false)
+      expect(game.is_available_cell(1, 7)).to eq(false)
 
-      game.is_available_cell(2, 0).should == false
-      game.is_available_cell(2, 1).should == false
-      game.is_available_cell(2, 2).should == false
-      game.is_available_cell(2, 3).should == true
-      game.is_available_cell(2, 4).should == false
-      game.is_available_cell(2, 5).should == false
-      game.is_available_cell(2, 6).should == false
-      game.is_available_cell(2, 7).should == false
+      expect(game.is_available_cell(2, 0)).to eq(false)
+      expect(game.is_available_cell(2, 1)).to eq(false)
+      expect(game.is_available_cell(2, 2)).to eq(false)
+      expect(game.is_available_cell(2, 3)).to eq(true)
+      expect(game.is_available_cell(2, 4)).to eq(false)
+      expect(game.is_available_cell(2, 5)).to eq(false)
+      expect(game.is_available_cell(2, 6)).to eq(false)
+      expect(game.is_available_cell(2, 7)).to eq(false)
 
-      game.is_available_cell(3, 0).should == false
-      game.is_available_cell(3, 1).should == false
-      game.is_available_cell(3, 2).should == true
-      #game.is_available_cell(3, 3).should == false
-      #game.is_available_cell(3, 4).should == true
-      game.is_available_cell(3, 5).should == false
-      game.is_available_cell(3, 6).should == false
-      game.is_available_cell(3, 7).should == false
+      expect(game.is_available_cell(3, 0)).to eq(false)
+      expect(game.is_available_cell(3, 1)).to eq(false)
+      expect(game.is_available_cell(3, 2)).to eq(true)
+      #expect(game.is_available_cell(3, 3)).to eq(false)
+      #expect(game.is_available_cell(3, 4)).to eq(true)
+      expect(game.is_available_cell(3, 5)).to eq(false)
+      expect(game.is_available_cell(3, 6)).to eq(false)
+      expect(game.is_available_cell(3, 7)).to eq(false)
 
-      game.is_available_cell(4, 0).should == false
-      game.is_available_cell(4, 1).should == false
-      game.is_available_cell(4, 2).should == false
-      #game.is_available_cell(4, 3).should == false
-      #game.is_available_cell(4, 4).should == true
-      game.is_available_cell(4, 5).should == true
-      game.is_available_cell(4, 6).should == false
-      game.is_available_cell(4, 7).should == false
+      expect(game.is_available_cell(4, 0)).to eq(false)
+      expect(game.is_available_cell(4, 1)).to eq(false)
+      expect(game.is_available_cell(4, 2)).to eq(false)
+      #expect(game.is_available_cell(4, 3)).to eq(false)
+      #expect(game.is_available_cell(4, 4)).to eq(true)
+      expect(game.is_available_cell(4, 5)).to eq(true)
+      expect(game.is_available_cell(4, 6)).to eq(false)
+      expect(game.is_available_cell(4, 7)).to eq(false)
 
-      game.is_available_cell(5, 0).should == false
-      game.is_available_cell(5, 1).should == false
-      game.is_available_cell(5, 2).should == false
-      game.is_available_cell(5, 3).should == false
-      game.is_available_cell(5, 4).should == true
-      game.is_available_cell(5, 5).should == false
-      game.is_available_cell(5, 6).should == false
-      game.is_available_cell(5, 7).should == false
+      expect(game.is_available_cell(5, 0)).to eq(false)
+      expect(game.is_available_cell(5, 1)).to eq(false)
+      expect(game.is_available_cell(5, 2)).to eq(false)
+      expect(game.is_available_cell(5, 3)).to eq(false)
+      expect(game.is_available_cell(5, 4)).to eq(true)
+      expect(game.is_available_cell(5, 5)).to eq(false)
+      expect(game.is_available_cell(5, 6)).to eq(false)
+      expect(game.is_available_cell(5, 7)).to eq(false)
 
-      game.is_available_cell(6, 0).should == false
-      game.is_available_cell(6, 1).should == false
-      game.is_available_cell(6, 2).should == false
-      game.is_available_cell(6, 3).should == false
-      game.is_available_cell(6, 4).should == false
-      game.is_available_cell(6, 5).should == false
-      game.is_available_cell(6, 6).should == false
-      game.is_available_cell(6, 7).should == false
+      expect(game.is_available_cell(6, 0)).to eq(false)
+      expect(game.is_available_cell(6, 1)).to eq(false)
+      expect(game.is_available_cell(6, 2)).to eq(false)
+      expect(game.is_available_cell(6, 3)).to eq(false)
+      expect(game.is_available_cell(6, 4)).to eq(false)
+      expect(game.is_available_cell(6, 5)).to eq(false)
+      expect(game.is_available_cell(6, 6)).to eq(false)
+      expect(game.is_available_cell(6, 7)).to eq(false)
 
-      game.is_available_cell(7, 0).should == false
-      game.is_available_cell(7, 1).should == false
-      game.is_available_cell(7, 2).should == false
-      game.is_available_cell(7, 3).should == false
-      game.is_available_cell(7, 4).should == false
-      game.is_available_cell(7, 5).should == false
-      game.is_available_cell(7, 6).should == false
-      game.is_available_cell(7, 7).should == false
+      expect(game.is_available_cell(7, 0)).to eq(false)
+      expect(game.is_available_cell(7, 1)).to eq(false)
+      expect(game.is_available_cell(7, 2)).to eq(false)
+      expect(game.is_available_cell(7, 3)).to eq(false)
+      expect(game.is_available_cell(7, 4)).to eq(false)
+      expect(game.is_available_cell(7, 5)).to eq(false)
+      expect(game.is_available_cell(7, 6)).to eq(false)
+      expect(game.is_available_cell(7, 7)).to eq(false)
     end
 
   end
@@ -496,11 +495,11 @@ describe "Game" do
       game.turn = 1
       game = game.handle_turn(2, 3)
 
-      game.turn.should == 2
-      game.board[2][3].should == :b
-      game.board[3][3].should == :b
-      game.history.length.should == 1
-      game.history[0].should == "b_2_3"
+      expect(game.turn).to eq(2)
+      expect(game.board[2][3]).to eq(:b)
+      expect(game.board[3][3]).to eq(:b)
+      expect(game.history.length).to eq(1)
+      expect(game.history[0]).to eq("b_2_3")
     end
   end
 
@@ -541,40 +540,40 @@ describe "Game" do
       game.reverse( 5, 4, :b)
 
       # 上
-      game.board[0][4].should == :b
-      game.board[1][4].should == :b
-      game.board[2][4].should == :b
-      game.board[3][4].should == :b
-      game.board[4][4].should == :b
+      expect(game.board[0][4]).to eq(:b)
+      expect(game.board[1][4]).to eq(:b)
+      expect(game.board[2][4]).to eq(:b)
+      expect(game.board[3][4]).to eq(:b)
+      expect(game.board[4][4]).to eq(:b)
       # 置いた場所
-      game.board[5][4].should == :b
+      expect(game.board[5][4]).to eq(:b)
       # # 右上
-      game.board[4][5].should == :b
-      game.board[3][6].should == :b
-      game.board[2][7].should == :b
+      expect(game.board[4][5]).to eq(:b)
+      expect(game.board[3][6]).to eq(:b)
+      expect(game.board[2][7]).to eq(:b)
       # 右
-      game.board[5][5].should == :b
-      game.board[5][6].should == :b
-      game.board[5][7].should == :b
+      expect(game.board[5][5]).to eq(:b)
+      expect(game.board[5][6]).to eq(:b)
+      expect(game.board[5][7]).to eq(:b)
       # 右下
-      game.board[6][5].should == :b
-      game.board[7][6].should == :b
+      expect(game.board[6][5]).to eq(:b)
+      expect(game.board[7][6]).to eq(:b)
       # 下
-      game.board[6][4].should == :b
-      game.board[7][4].should == :b
+      expect(game.board[6][4]).to eq(:b)
+      expect(game.board[7][4]).to eq(:b)
       # 左下
-      game.board[6][3].should == :b
-      game.board[7][2].should == :b
+      expect(game.board[6][3]).to eq(:b)
+      expect(game.board[7][2]).to eq(:b)
       # 左
-      game.board[5][0].should == :b
-      game.board[5][1].should == :b
-      game.board[5][2].should == :b
-      game.board[5][3].should == :b
+      expect(game.board[5][0]).to eq(:b)
+      expect(game.board[5][1]).to eq(:b)
+      expect(game.board[5][2]).to eq(:b)
+      expect(game.board[5][3]).to eq(:b)
       # 左上
-      game.board[4][3].should == :b
-      game.board[3][2].should == :b
-      game.board[2][1].should == :b
-      game.board[1][0].should == :b
+      expect(game.board[4][3]).to eq(:b)
+      expect(game.board[3][2]).to eq(:b)
+      expect(game.board[2][1]).to eq(:b)
+      expect(game.board[1][0]).to eq(:b)
     end
 
   end
@@ -599,14 +598,14 @@ describe "Game" do
       game.board[5][4] = :b
       game.reverse_dir( 5, 4, :b, Game::Dir::UP)
 
-      game.board[0][4].should == nil
-      game.board[1][4].should == nil
-      game.board[2][4].should == nil
-      game.board[3][4].should == :b
-      game.board[4][4].should == :b
-      game.board[5][4].should == :b
-      game.board[6][4].should == nil
-      game.board[7][4].should == nil
+      expect(game.board[0][4]).to eq(nil)
+      expect(game.board[1][4]).to eq(nil)
+      expect(game.board[2][4]).to eq(nil)
+      expect(game.board[3][4]).to eq(:b)
+      expect(game.board[4][4]).to eq(:b)
+      expect(game.board[5][4]).to eq(:b)
+      expect(game.board[6][4]).to eq(nil)
+      expect(game.board[7][4]).to eq(nil)
     end
 
     #  0 1 2 3 4 5 6 7
@@ -631,14 +630,14 @@ describe "Game" do
       game.board[5][4] = :b
       game.reverse_dir( 5, 4, :b, Game::Dir::UP)
 
-      game.board[0][4].should == :b
-      game.board[1][4].should == :b
-      game.board[2][4].should == :b
-      game.board[3][4].should == :b
-      game.board[4][4].should == :b
-      game.board[5][4].should == :b
-      game.board[6][4].should == nil
-      game.board[7][4].should == nil
+      expect(game.board[0][4]).to eq(:b)
+      expect(game.board[1][4]).to eq(:b)
+      expect(game.board[2][4]).to eq(:b)
+      expect(game.board[3][4]).to eq(:b)
+      expect(game.board[4][4]).to eq(:b)
+      expect(game.board[5][4]).to eq(:b)
+      expect(game.board[6][4]).to eq(nil)
+      expect(game.board[7][4]).to eq(nil)
     end
 
   end
@@ -649,7 +648,7 @@ describe "Game" do
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
       game.turn = 1
-      game.is_finish.should == false
+      expect(game.is_finish).to eq(false)
     end
     it "ゲーム終了判定検査（1回パス）" do
       game = Game.new
@@ -657,7 +656,7 @@ describe "Game" do
       game.player_odd = "odd@address.com"
       game.turn = 1
       game.history.push("pass")
-      game.is_finish.should == false
+      expect(game.is_finish).to eq(false)
     end
     it "ゲーム終了判定検査（2連続パス）" do
       game = Game.new
@@ -666,7 +665,7 @@ describe "Game" do
       game.turn = 2
       game.history.push("pass")
       game.history.push("pass")
-      game.is_finish.should == true
+      expect(game.is_finish).to eq(true)
     end
     it "ゲーム終了判定検査（置く場所無し）" do
       game = Game.new
@@ -678,7 +677,7 @@ describe "Game" do
           game.board[row][col] = :w
         end
       end
-      game.is_finish.should == true
+      expect(game.is_finish).to eq(true)
     end
   end
 
@@ -687,8 +686,8 @@ describe "Game" do
       game = Game.new
       game.board[0][0] = :w
       game.board[0][1] = :b
-      game.get_count[:b].should == 3
-      game.get_count[:w].should == 3
+      expect(game.get_count[:b]).to eq(3)
+      expect(game.get_count[:w]).to eq(3)
     end
   end
 

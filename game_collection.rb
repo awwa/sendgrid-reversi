@@ -1,4 +1,5 @@
 require 'mongo'
+require './db_access'
 
 class GameCollection < DbAccess
 

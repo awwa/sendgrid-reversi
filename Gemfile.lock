@@ -37,6 +37,8 @@ GEM
     sendgrid_ruby (0.0.3)
       rest-client
       smtpapi
+    sendgrid_template_engine (0.0.1)
+      rest-client
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -61,5 +63,6 @@ DEPENDENCIES
   rack-test
   rspec
   sendgrid_ruby
+  sendgrid_template_engine
   sinatra
   sinatra-contrib
