@@ -36,6 +36,9 @@ describe "Mailer" do
 
   describe "send_board" do
     it "未完了ボードメール送信検査" do
+      settings = Settings.new
+      Configure.init_sendgrid(settings)
+
       game = Game.new
       game.player_even = "wataru@kke.co.jp"
       game.player_odd = "awwa500@gmail.com"
@@ -49,6 +52,9 @@ describe "Mailer" do
     end
 
     it "完了ボードメール送信検査" do
+      settings = Settings.new
+      Configure.init_sendgrid(settings)
+
       game = Game.new
       game.player_even = "wataru@kke.co.jp"
       game.player_odd = "awwa500@gmail.com"

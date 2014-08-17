@@ -9,8 +9,8 @@ describe "Settings" do
       settings = Settings.new(".env.example")
       expect(settings.username).to eq("your_username")
       expect(settings.password).to eq("your_password")
-      expect(settings.parse_address).to eq("game@rev.awwa500.bymail.in")
-      expect(settings.app_host).to eq("http://app.host.example.com")
+      expect(settings.app_url).to eq("http://app.host.example.com")
+      expect(settings.parse_host).to eq("rev.awwa500.bymail.in")
     end
   end
 

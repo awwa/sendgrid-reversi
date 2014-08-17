@@ -2,6 +2,7 @@ require 'sendgrid_template_engine'
 require 'templates'
 require './app_config_collection'
 require './app_config'
+require './sendgrid'
 
 module Configure
 
@@ -10,6 +11,34 @@ module Configure
 
   def init_sendgrid(settings)
     Configure.init_template(settings)
+    Configure.init_apps(settings)
+  end
+
+  def init_apps(settings)
+    sendgrid = Sendgrid.new(settings.username, settings.password)
+
+    sendgrid.activate_app("clicktrack")
+    sendgrid.activate_app("eventnotify")
+
+    filter_clicktrack = FilterSettings.new
+    filter_clicktrack.params["name"] = "clicktrack"
+    filter_clicktrack.params["enable_text"] = 1
+    sendgrid.filter_setup(filter_clicktrack)
+
+    filter_eventnotify = FilterSettings.new
+    filter_eventnotify.params["name"] = "eventnotify"
+    filter_eventnotify.params["processed"] = 0
+    filter_eventnotify.params["dropped"] = 0
+    filter_eventnotify.params["deferred"] = 0
+    filter_eventnotify.params["delivered"] = 0
+    filter_eventnotify.params["bounce"] = 0
+    filter_eventnotify.params["click"] = 1
+    filter_eventnotify.params["open"] = 0
+    filter_eventnotify.params["unsubscribe"] = 0
+    filter_eventnotify.params["spamreport"] = 0
+    filter_eventnotify.params["url"] = settings.app_url + "/event"
+    sendgrid.filter_setup(filter_eventnotify)
+
   end
 
   def init_template(settings)
@@ -84,6 +113,7 @@ module Configure
   end
 
   module_function :init_sendgrid
+  module_function :init_apps
   module_function :init_template
   module_function :create_template
 

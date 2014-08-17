@@ -4,6 +4,19 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Configure" do
 
+  describe "init_apps" do
+    it "Apps設定検査" do
+      begin
+        settings = Settings.new
+        Configure.init_apps(settings)
+      rescue => e
+        puts e.inspect
+        puts e.backtrace
+      end
+    end
+  end
+
+
   describe "create_template" do
     it "テンプレート作成検査" do
       begin

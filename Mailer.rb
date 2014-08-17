@@ -40,7 +40,7 @@ class Mailer
   def send_message(to, message)
     email = SendgridRuby::Email.new
     email.add_to(to)
-    email.set_from(@settings.parse_address)
+    email.set_from("game@" + @settings.parse_host)
     email.set_subject(SUBJECT)
     email.set_text(message)
     email.set_html(message)
@@ -53,12 +53,12 @@ class Mailer
 
   def send_board(to, game)
     # prepare game data
-    prep = game.to_prepared(@settings.app_host)
+    prep = game.to_prepared(@settings.app_url)
 
     # send email
     email = SendgridRuby::Email.new
     email.add_to(to)
-    email.set_from(@settings.parse_address)
+    email.set_from("game@" + @settings.parse_host)
     email.set_subject(SUBJECT)
     email.set_text(" ")
     email.set_html(" ")
@@ -80,8 +80,8 @@ class Mailer
     end
     email.add_substitution("#name_b#", [name_b])
     email.add_substitution("#name_w#", [name_w])
-    email.add_substitution("#b#", [game.get_img_tag(@settings.app_host, "b.png")])
-    email.add_substitution("#w#", [game.get_img_tag(@settings.app_host, "w.png")])
+    email.add_substitution("#b#", [game.get_img_tag(@settings.app_url, "b.png")])
+    email.add_substitution("#w#", [game.get_img_tag(@settings.app_url, "w.png")])
     email.add_substitution("#h_finish#", [game.is_finish ? "<p style='width: 90%; background-color: #ff0000; color: #ffffff; padding: 1%;'>勝負あり</p>" : ""])
 
     # for plain text template
