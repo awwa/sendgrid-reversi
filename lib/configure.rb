@@ -1,8 +1,10 @@
+# -*- encoding: utf-8 -*-
+
 require 'sendgrid_template_engine'
 require 'templates'
-require './app_config_collection'
-require './app_config'
-require './sendgrid'
+require './lib/app_config_collection'
+require './lib/app_config'
+require './lib/sendgrid'
 
 module Configure
 

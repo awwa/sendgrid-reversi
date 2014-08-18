@@ -1,5 +1,7 @@
+# -*- encoding: utf-8 -*-
+
 require 'mongo'
-require './db_access'
+require './lib/db_access'
 
 class GameCollection < DbAccess
 

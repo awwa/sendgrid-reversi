@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 require 'sendgrid_ruby'
 require 'sendgrid_ruby/version'
 require 'sendgrid_ruby/email'

@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Main" do
   include Rack::Test::Methods
   def app
-    @app ||= Sinatra::Application
+    @app ||= Reversi::Main
   end
 
   describe "レスポンス検査" do

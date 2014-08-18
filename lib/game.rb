@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 require 'mongo'
 require 'base64'
 require 'uri'
