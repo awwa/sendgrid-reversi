@@ -17,7 +17,7 @@ module Configure
   end
 
   def init_apps(settings)
-    sendgrid = Sendgrid.new(settings.username, settings.password)
+    sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
 
     sendgrid.activate_app("clicktrack")
     sendgrid.activate_app("eventnotify")
@@ -61,7 +61,7 @@ module Configure
 
   def create_template(settings)
 
-    templates = SendgridTemplateEngine::Templates.new(settings.username, settings.password)
+    templates = SendgridTemplateEngine::Templates.new(settings.sendgrid_username, settings.sendgrid_password)
     tmps = templates.get_all()
     exist_board = false
     exist_message = false
@@ -92,7 +92,7 @@ module Configure
     end
 
     # バージョンを作成する
-    versions = SendgridTemplateEngine::Versions.new(settings.username, settings.password)
+    versions = SendgridTemplateEngine::Versions.new(settings.sendgrid_username, settings.sendgrid_password)
 
     new_ver_board = SendgridTemplateEngine::Version.new()
     new_ver_board.set_name("reversi_board_1")

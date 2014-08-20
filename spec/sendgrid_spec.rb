@@ -7,7 +7,7 @@ describe "SendGrid" do
     it "ParseSet検査" do
       begin
         settings = Settings.new
-        sendgrid = Sendgrid.new(settings.username, settings.password)
+        sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
         json_str = JSON.generate(res_str)
         res = JSON.parse(json_str)
@@ -23,7 +23,7 @@ describe "SendGrid" do
     it "ClickTracking有効化検査" do
       begin
         settings = Settings.new
-        sendgrid = Sendgrid.new(settings.username, settings.password)
+        sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.activate_app("clicktrack")
         json_str = JSON.generate(res_str)
         res = JSON.parse(json_str)
@@ -37,7 +37,7 @@ describe "SendGrid" do
     it "EventNotification有効化検査" do
       begin
         settings = Settings.new
-        sendgrid = Sendgrid.new(settings.username, settings.password)
+        sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.activate_app("eventnotify")
         json_str = JSON.generate(res_str)
         res = JSON.parse(json_str)
@@ -57,7 +57,7 @@ describe "SendGrid" do
         filter.params["enable_text"] = 1
 
         settings = Settings.new
-        sendgrid = Sendgrid.new(settings.username, settings.password)
+        sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.filter_setup(filter)
         json_str = JSON.generate(res_str)
         res = JSON.parse(json_str)
@@ -85,7 +85,7 @@ describe "SendGrid" do
         filter.params["spamreport"] = 0
         filter.params["url"] = settings.app_host + "/event"
 
-        sendgrid = Sendgrid.new(settings.username, settings.password)
+        sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.filter_setup(filter)
         json_str = JSON.generate(res_str)
         res = JSON.parse(json_str)

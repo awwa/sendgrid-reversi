@@ -48,7 +48,7 @@ class Mailer
     email.set_html(message)
     email.add_filter("templates", "enabled", 1)
     email.add_filter("templates", "template_id", @app_config.template_id_message)
-    sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
+    sendgrid = SendgridRuby::Sendgrid.new(@settings.sendgrid_username, @settings.sendgrid_password)
     response = sendgrid.send(email)
     @logger.info "send_message: #{to}"
   end
@@ -103,7 +103,7 @@ class Mailer
 
     email.add_filter("templates", "enabled", 1)
     email.add_filter("templates", "template_id", @app_config.template_id_board)
-    sendgrid = SendgridRuby::Sendgrid.new(@settings.username, @settings.password)
+    sendgrid = SendgridRuby::Sendgrid.new(@settings.sendgrid_username, @settings.sendgrid_password)
     response = sendgrid.send(email)
     @logger.info "send_board: #{to}"
   end

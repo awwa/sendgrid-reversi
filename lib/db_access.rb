@@ -1,14 +1,23 @@
 # -*- encoding: utf-8 -*-
 
 require 'mongo'
+require './lib/settings'
 
 class DbAccess
 
   attr_accessor :db, :coll
 
   def initialize(coll_name)
-    @connection = Mongo::Connection.new('localhost') # TODO 環境変数にする
-    @db = @connection.db('reversi')
+    settings = Settings.new
+    if settings.mongo_port.length > 0 then
+      @connection = Mongo::Connection.new(settings.mongo_host, settings.mongo_port)
+    else
+      @connection = Mongo::Connection.new(settings.mongo_host)
+    end
+    @db = @connection.db(settings.mongo_db)
+    if settings.mongo_username.length > 0 then
+      auth = @db.authenticate(settings.mongo_username, settings.mongo_password)
+    end
     @coll = @db.collection(coll_name)
   end
 
