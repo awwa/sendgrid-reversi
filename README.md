@@ -10,7 +10,7 @@ The SendGrid-Reversi is an open source demo project.
 
 # Installation & Setup
 
-### 1. Run the ngrok  
+##### 1. Run the ngrok  
 '4567' is the port number to tunnel.  
 You can see Forwarding URL.
 ``` bash
@@ -25,23 +25,23 @@ Web Interface                 127.0.0.1:4040
 Avg Conn Time                 0.00ms
 ```
 
-### 2. Get the source code from GitHub
+##### 2. Get the source code from GitHub
 ``` bash
 $ git clone https://github.com/awwa/sendgrid-reversi.git
 $ cd sendgrid-reversi
 ```
 
-### 3. Run bundle install
+##### 3. Run bundle install
 ``` bash
 $ bundle install
 ```
 
-### 4. Copy .env file
+##### 4. Copy .env file
 ``` bash
 $ cp .env.example .env
 ```
 
-### 5. Edit the .env file
+##### 5. Edit the .env file
 ``` bash
 vi .env
 SENDGRID_USERNAME=your_username
