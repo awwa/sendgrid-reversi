@@ -4,26 +4,28 @@ The SendGrid-Reversi is an open source demo project.
 
 # How it works
 
-This application uses some of SendGrid API.
+This application is Ruby application to work on Sinatra.  
+This uses some of SendGrid APIs.
 * Web API(Mail, Filter Settings, Parse Webhook Settings)
 * SMTP API(To, Substitutions, Filters)
 * Parse Webhook
 * Event Webhook (Click)
 * Template Engine API
 
-This application stores the game data and template id to MongoDB.
+This stores the game data and template id to MongoDB.
 
 # System Requirements
 * [Ruby](https://www.ruby-lang.org) 2.0.0 or higher
-* [Bundler](http://bundler.io/)
+* [Bundler](http://bundler.io/) ([Sinatra](http://www.sinatrarb.com/), [sendgrid_ruby](https://github.com/SendGridJP/sendgrid-ruby),[sendgrid_template_engine](https://github.com/awwa/sendgrid_template_engine_ruby)... See [Gemfile](https://github.com/awwa/sendgrid-reversi/blob/master/Gemfile) for detail)
 * [MongoDB](http://www.mongodb.org/)
 * [ngrok](https://ngrok.com/) (for local environment)
 
 # Installation & Setup
 
 ##### 1. Run the ngrok  
+[ngrok](https://ngrok.com/) is easy way to publish your service if you launch the application on local environment.  
 '4567' is the port number to tunnel.  
-You can see Forwarding URL.
+You will see Forwarding URL when you launch ngrok.
 ``` bash
 $ ngrok 4567  
 ngrok                                                                                                                                                                                                                         (Ctrl+C to quit)
