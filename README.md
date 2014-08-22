@@ -91,7 +91,7 @@ Subject: player2@address.test
 1. Get an email and click it  
 Player2 get an email like this.  
 He(she) can click on the email where he(she) want to put disc.
-![Board email](https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png)  
+<img src="https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png" width="450px" />  
 After this, the each player get an email then click it.
 
 1. Pass your turn  
@@ -104,4 +104,4 @@ The game will finish in the case:
 
 1. text/plain part  
 You can view text/plain version board email if your email client does not support html mail.
-![text/plain email](https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_plain.png)
+<img src="https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_plain.png" width="450px" />  
