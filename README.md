@@ -105,3 +105,7 @@ The game will finish in the case:
 ##### 5. text/plain part  
 You can view text/plain version board email if your email client does not support html mail.
 <img src="https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_plain.png" width="450px" />  
+
+# Limitation
+Do not say 'Create a browser based application'.
+This is demo application. ;-)
