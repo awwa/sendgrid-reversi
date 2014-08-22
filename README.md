@@ -3,16 +3,16 @@ sendgrid-reversi
 The SendGrid-Reversi is an open source demo project.  
 
 # System Requirements
-* Ruby 2.0.0 or higher
-* Bundler
-* MongoDB
-* ngrok(for local environment)
+* [Ruby](https://www.ruby-lang.org) 2.0.0 or higher
+* [Bundler](http://bundler.io/)
+* [MongoDB](http://www.mongodb.org/)
+* [ngrok](https://ngrok.com/) (for local environment)
 
 # Installation & Setup
 
 1. Run the ngrok  
-'4567' is the port to tunnel.  
-You can get Forwarding URL.
+'4567' is the port number to tunnel.  
+You can see Forwarding URL.
 ``` bash
 $ ngrok 4567  
 ngrok                                                                                                                                                                                                                         (Ctrl+C to quit)
@@ -59,17 +59,22 @@ MONGO_PASSWORD=
 |:--------------------|:------------------------------------|
 |**SENDGRID_USERNAME**|Your SendGrid username.              |
 |**SENDGRID_PASSWORD**|Your SendGrid password.              |
-|**APP_URL**          |'URL Forwarding' value of ngrok.     |
-|**PARSE_HOST**       |Domain name of receive email.        |
+|**APP_URL**          |Your application URL. 'URL Forwarding' value if you use ngrok.     |
+|**PARSE_HOST**       |The domain name of receive email.        |
 |**MONGO_HOST**       |The host name of mongodb running.    |
 |**MONGO_PORT**       |The port number of mongodb listening.|
-|**MONGO_DB**         |The name of db. 'reversi' is default.|
-|**MONGO_USERNAME**   |The username of mongodb. Empty if no need to authenticate.|
+|**MONGO_DB**         |The name of db. 'reversi' is the default.|
+|**MONGO_USERNAME**   |The username of mongodb. remains empty if no need to authenticate.|
 |**MONGO_PASSWORD**   |The password of mongodb for access.|
 
-# Launch Application
-The application setup SendGrid when first time launch.  
+# Launch the application
+1. Launch mongod  
+``` bash
+$ mongod
+```
 
+2. Launch Application  
+The application setup SendGrid when first time launch. Also start the service to listen.  
 ``` bash
 $ RACK_ENV=production rackup -p 4567
 ```
@@ -81,9 +86,22 @@ Player1 sends email to any address of PARSE_HOST domain.
 That subject include email address of player2.
 ``` text
 To: game@your.receive.domain
-Subject: player-2@address.test
+Subject: player2@address.test
 ```
-1. Get an email of board and click it   
+1. Get an email and click it  
 Player2 get an email like this.  
-![Board email](https://raw.github.com/wiki/awwa/sendgrid-reversi/dev/board.png)
-Player2 can click on the email where he(she) want to put disc.
+He(she) can click on the email where he(she) want to put disc.
+![Board email](https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png)  
+After this, the each player get an email then click it.
+
+1. Pass your turn  
+You can click 'Pass your turn' link under the board if you want to pass your turn.  
+
+1. Finish the game  
+The game will finish in the case:
+  * All cell was filled.
+  * Each player continuously clicked the pass link.
+
+1. text/plain part  
+You can view text/plain version board email if your email client does not support html mail.
+![text/plain email](https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_plain.png)
