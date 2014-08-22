@@ -108,4 +108,4 @@ You can view text/plain version board email if your email client does not suppor
 
 # Limitation
 Do not say 'Create a browser based application'.
-This is demo application. ;-)
+This is a demo application. ;-)
