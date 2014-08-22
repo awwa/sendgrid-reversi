@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Mailer" do
 
   describe "send" do
-    it "メール送信検査" do
+    it "Validate send email" do
       begin
         game = Game.new
         game.player_even = "wataru@kke.co.jp"
@@ -24,7 +24,7 @@ describe "Mailer" do
   end
 
   describe "send_message" do
-    it "メッセージメール送信検査" do
+    it "Validate send message email" do
       begin
         mailer = Mailer.new
         mailer.send_message("awwa500@gmail.com", "This is the test mail.")
@@ -35,7 +35,7 @@ describe "Mailer" do
   end
 
   describe "send_board" do
-    it "未完了ボードメール送信検査" do
+    it "Validate send board email which game is not over" do
       settings = Settings.new
       Configure.init_sendgrid(settings)
 
@@ -51,7 +51,7 @@ describe "Mailer" do
       mailer.send_board(game.player_even, game)
     end
 
-    it "完了ボードメール送信検査" do
+    it "Validate send board email which game is over" do
       settings = Settings.new
       Configure.init_sendgrid(settings)
 

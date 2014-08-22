@@ -7,16 +7,14 @@ describe "Main" do
     @app ||= Reversi::Main
   end
 
-  describe "レスポンス検査" do
-    describe "/game へのアクセス" do
-      before { post '/game' }
-      subject { last_response }
-      it "正常なレスポンス" do
-        should be_ok
-      end
-      it "Fail to parse to and from addressと出力されること" do
-        expect(subject.body).to eq('Fail to parse to and from address')
-      end
+  describe "Access to /game" do
+    before { post '/game' }
+    subject { last_response }
+    it "Validate normal response" do
+      should be_ok
+    end
+    it "Validate the response message is 'Fail to parse to and from address'" do
+      expect(subject.body).to eq('Fail to parse to and from address')
     end
   end
 end

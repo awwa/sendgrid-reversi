@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "Game" do
   describe "initialize" do
-    it "初期値検査" do
+    it "Validate constructor" do
       game = Game.new
       expect(game.player_even).to eq("")
       expect(game.player_odd).to eq("")
@@ -22,7 +22,7 @@ describe "Game" do
   end
 
   describe "to_array" do
-    it "ハッシュ検査" do
+    it "Validate get hash" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -42,16 +42,16 @@ describe "Game" do
   end
 
   describe "generate_cell_url" do
-    it "セルURL生成検査" do
+    it "Validate create cell url" do
       expect(Game.generate_cell_url("https://test.com", "12345", 222, 4, 5)).to eq( "https://test.com/event?obj_id=12345&turn=222&row=4&col=5")
     end
-    it "パスURL生成検査" do
+    it "Validate pass url" do
       expect(Game.generate_cell_url("https://test.com", "12345", 222, -1, -1)).to eq( "https://test.com/event?obj_id=12345&turn=222&row=-1&col=-1")
     end
   end
 
   describe "parse_cell_url" do
-    it "セルURL解析検査" do
+    it "Validate parse cell url" do
       data = Game.parse_cell_url("https://test.com/event?obj_id=12345&turn=222&row=4&col=5")
       expect(data['obj_id']).to eq("12345")
       expect(data['turn']).to eq(222)
@@ -61,7 +61,7 @@ describe "Game" do
   end
 
   describe "to_prepared" do
-    it "準備検査" do
+    it "Validate prepare" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -91,7 +91,7 @@ describe "Game" do
   end
 
   describe "conv_plain_coord" do
-    it "plain/text用座標変換処理検査" do
+    it "Validate tranform position for plain/text" do
       expect(Game.conv_plain_coord(1, 2)).to eq("C2")
     end
   end
@@ -107,7 +107,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置ける場所であることの検査1" do
+    it "Validate available 1" do
       game = Game.new
       game.turn = 100
       game.board[0][0] = :w
@@ -132,7 +132,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置けない場所であることの検査1" do
+    it "Validate unavailable 1" do
       game = Game.new
       game.turn = 100
       game.board[0][0] = :w
@@ -157,7 +157,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置ける場所であることの検査1" do
+    it "Validate available 2" do
       game = Game.new
       game.turn = 100
       game.board[0][0] = :w
@@ -182,7 +182,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置けない場所であることの検査2" do
+    it "Validate unavailable 2" do
       game = Game.new
       game.turn = 100
       game.board[0][0] = :w
@@ -207,7 +207,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置ける場所であることの検査1" do
+    it "Validate unavailable 3" do
       game = Game.new
       game.turn = 101
       game.board[0][0] = :w
@@ -232,7 +232,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置けない場所であることの検査1" do
+    it "Validate available 3" do
       game = Game.new
       game.turn = 101
       game.board[0][0] = :w
@@ -257,7 +257,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置ける場所であることの検査1" do
+    it "Validate unavailable 4" do
       game = Game.new
       game.turn = 101
       game.board[0][0] = :w
@@ -282,7 +282,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "石を置けない場所であることの検査2" do
+    it "Validate unavailable 5" do
       game = Game.new
       game.turn = 101
       game.board[0][0] = :w
@@ -311,7 +311,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "白石を置ける場所であることの検査1" do
+    it "Validate available for black 1" do
       game = Game.new
       game.turn = 100
       game.board[0][0] = :w
@@ -397,7 +397,7 @@ describe "Game" do
     #5
     #6
     #7
-    it "黒石を置ける場所であることの検査1" do
+    it "Validate available for black 1" do
       game = Game.new
       game.turn = 101
       game.board[0][0] = :w
@@ -488,7 +488,7 @@ describe "Game" do
   #6
   #7
   describe "handle_turn" do
-    it "イベント処理検査" do
+    it "Validate handle turn" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -510,10 +510,10 @@ describe "Game" do
     #2 w w w w w w w b
     #3 w w w w w w w w
     #4 w w w w w w w w
-    #5 b w w w * w w b
+    #5 b w w w*b w w b
     #6 w w w w w w w w
     #7 w w b w b w b w
-    it "ひっくり返す処理（上挟んでいる）検査" do
+    it "Validate reverse(Up)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -587,10 +587,10 @@ describe "Game" do
     #2
     #3       w b
     #4       b w
-    #5         b
+    #5        *b
     #6
     #7
-    it "ひっくり返す処理（上挟んでいる）検査" do
+    it "Validate reverse(Up)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -614,10 +614,10 @@ describe "Game" do
     #2         w
     #3       w w
     #4       b w
-    #5         b
+    #5        *b
     #6
     #7
-    it "ひっくり返す処理（上挟んでいない）検査" do
+    it "Validate reverse(no Up)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -643,14 +643,14 @@ describe "Game" do
   end
 
   describe "is_finish" do
-    it "ゲーム終了判定検査（未終了）" do
+    it "Validate finish the game(no finish)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
       game.turn = 1
       expect(game.is_finish).to eq(false)
     end
-    it "ゲーム終了判定検査（1回パス）" do
+    it "Validate finish the game(1 time pass)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -658,7 +658,7 @@ describe "Game" do
       game.history.push("pass")
       expect(game.is_finish).to eq(false)
     end
-    it "ゲーム終了判定検査（2連続パス）" do
+    it "Validate finish the game(2 continuous pass)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -667,7 +667,7 @@ describe "Game" do
       game.history.push("pass")
       expect(game.is_finish).to eq(true)
     end
-    it "ゲーム終了判定検査（置く場所無し）" do
+    it "Validate finish the game(all cell has been filled)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
@@ -682,7 +682,7 @@ describe "Game" do
   end
 
   describe "get_count" do
-    it "石の数検査" do
+    it "Validate number of discs" do
       game = Game.new
       game.board[0][0] = :w
       game.board[0][1] = :b

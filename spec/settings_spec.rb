@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Settings" do
 
   describe "initialize" do
-    it "インスタンス生成検査" do
+    it "Validate constructor" do
       settings = Settings.new(".env.example")
       expect(settings.sendgrid_username).to eq("your_username")
       expect(settings.sendgrid_password).to eq("your_password")

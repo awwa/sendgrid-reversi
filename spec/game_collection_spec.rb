@@ -3,20 +3,20 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "GameCollection" do
   describe "initialize" do
-    it "初期値検査" do
+    it "Validate constructor" do
       dba = GameCollection.new
     end
   end
 
   describe "drop_all" do
-    it "全削除検査" do
+    it "Validate drop all collections" do
       dba = GameCollection.new
       dba.drop_all
     end
   end
 
   describe "insert" do
-    it "挿入検査" do
+    it "Validate insert" do
       game = Game.new
       dba = GameCollection.new
       dba.drop_all
@@ -29,7 +29,7 @@ describe "GameCollection" do
   end
 
   describe "update" do
-    it "存在しない場合の更新検査" do
+    it "Validate update if not exist case" do
       game = Game.new
       dba = GameCollection.new
       dba.drop_all
@@ -37,7 +37,7 @@ describe "GameCollection" do
       expect(ret['n']).to eq(0)
     end
 
-    it "存在する場合の更新検査" do
+    it "Validate update if exist case" do
       game = Game.new
       dba = GameCollection.new
       dba.drop_all
@@ -60,13 +60,13 @@ describe "GameCollection" do
   end
 
   describe "findById" do
-    it "存在しないIDによる検査" do
+    it "Validate find by id if not exist id" do
       dba = GameCollection.new
       dba.drop_all
       actual = dba.findById(BSON::ObjectId.from_string("53e317befe1c1d2b39000001"))
       expect(actual).to eq(nil)
     end
-    it "存在するIDによる検査" do
+    it "Validate find by id if exist id" do
       dba = GameCollection.new
       dba.drop_all
       game = Game.new
@@ -77,7 +77,7 @@ describe "GameCollection" do
   end
 
   describe "find" do
-    it "正常なplayerによる検索" do
+    it "Validate find by player normal order" do
       dba = GameCollection.new
       dba.drop_all
 
@@ -99,7 +99,7 @@ describe "GameCollection" do
       expect(actual1.player_odd).to eq("odd1@address.com")
     end
 
-    it "逆順playerによる検索" do
+    it "Validate find by player opposite order" do
       dba = GameCollection.new
       dba.drop_all
 
@@ -121,7 +121,7 @@ describe "GameCollection" do
       expect(actual1.player_odd).to eq("odd1@address.com")
     end
 
-    it "存在しないplayerによる検索" do
+    it "Validate find by player if not exist" do
       dba = GameCollection.new
       dba.drop_all
 
@@ -143,7 +143,7 @@ describe "GameCollection" do
   end
 
   describe "remove" do
-    it "存在するID指定削除検査" do
+    it "Validate remove if exist" do
       dba = GameCollection.new
       dba.drop_all
 
@@ -154,7 +154,7 @@ describe "GameCollection" do
       expect(res["n"]).to eq(1)
     end
 
-    it "存在しないID指定削除検査" do
+    it "Validate remove if not exist" do
       dba = GameCollection.new
       dba.drop_all
 

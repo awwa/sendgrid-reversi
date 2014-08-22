@@ -4,12 +4,13 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "SendGrid" do
 
   describe "parse_set" do
-    it "ParseSet検査" do
+    it "Validate parse set" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
         json_str = JSON.generate(res_str)
+        puts "json_str: #{json_str}"
         res = JSON.parse(json_str)
         expect(res["message"]).to eq("success")
       rescue => e
@@ -20,7 +21,7 @@ describe "SendGrid" do
   end
 
   describe "activate_app" do
-    it "ClickTracking有効化検査" do
+    it "Validate enable ClickTracking" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
@@ -34,7 +35,7 @@ describe "SendGrid" do
       end
     end
 
-    it "EventNotification有効化検査" do
+    it "Validate enable EventNotification" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
@@ -50,7 +51,7 @@ describe "SendGrid" do
   end
 
   describe "filter_setup" do
-    it "ClickTracking検査" do
+    it "Validate enable ClickTracking" do
       begin
         filter = FilterSettings.new
         filter.params["name"] = "clicktrack"
@@ -68,7 +69,7 @@ describe "SendGrid" do
       end
     end
 
-    it "EventNotification検査" do
+    it "Validate enable EventNotification" do
       begin
         settings = Settings.new
 
@@ -83,7 +84,7 @@ describe "SendGrid" do
         filter.params["open"] = 0
         filter.params["unsubscribe"] = 0
         filter.params["spamreport"] = 0
-        filter.params["url"] = settings.app_host + "/event"
+        filter.params["url"] = settings.app_url + "/event"
 
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res_str = sendgrid.filter_setup(filter)

@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe "Configure" do
 
   describe "init_apps" do
-    it "Apps設定検査" do
+    it "Validate initialize application" do
       begin
         settings = Settings.new
         Configure.init_apps(settings)
@@ -18,7 +18,7 @@ describe "Configure" do
 
 
   describe "create_template" do
-    it "テンプレート作成検査" do
+    it "Validate create template" do
       begin
         settings = Settings.new
         tmp_id_board, tmp_id_message = Configure.create_template(settings)
@@ -32,7 +32,7 @@ describe "Configure" do
   end
 
   describe "init_template" do
-    it "テンプレート初期化検査" do
+    it "Validate initialize template" do
       begin
         dba = AppConfigCollection.new
         dba.drop_all
