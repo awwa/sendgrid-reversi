@@ -69,7 +69,8 @@ class Game
         if @board[row][col] == nil then
           if is_available_cell(row, col) then
             url = Game.generate_cell_url(app_host, @_id, @turn, row, col)
-            prep.board[row][col] = "<a href='#{url}'><img style='width: 100%;' src='#{app_host}/n.png'></a>"
+            (@turn % 2 == 0) ? disc = "w_available.png" : disc = "b_available.png"
+            prep.board[row][col] = "<a href='#{url}'><img style='width: 100%;' src='#{app_host}/#{disc}'></a>"
             prep.p_board[row][col] = "*"
             prep.p_links.store(Game.conv_plain_coord(row,col), url)
           else
