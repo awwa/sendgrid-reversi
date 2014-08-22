@@ -33,9 +33,9 @@ class Mailer
 
     # Send accept mail for wait player
     if game.turn == 1 then
-      send_message(wait_player, "Your play request has been accepted. Please wait for email response.")
+      send_message(wait_player, "Your play request was accepted. Please wait for email response.")
     else
-      send_message(wait_player, "Your request has been sent to opponent player. Please wait for email response.")
+      send_message(wait_player, "Your request was sent to opponent player. Please wait for email response.")
     end
   end
 

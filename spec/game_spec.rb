@@ -667,7 +667,7 @@ describe "Game" do
       game.history.push("pass")
       expect(game.is_finish).to eq(true)
     end
-    it "Validate finish the game(all cell has been filled)" do
+    it "Validate finish the game(all cell was filled)" do
       game = Game.new
       game.player_even = "even@address.com"
       game.player_odd = "odd@address.com"
