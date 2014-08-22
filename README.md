@@ -6,7 +6,7 @@ The SendGrid-Reversi is an open source demo project.
 
 This application uses some of SendGrid API.
 * Web API(Mail, Filter Settings, Parse Webhook Settings)
-* SMTP API(Substitutions, Filters)
+* SMTP API(To, Substitutions, Filters)
 * Parse Webhook
 * Event Webhook (Click)
 * Template Engine API
