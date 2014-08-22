@@ -2,6 +2,16 @@ sendgrid-reversi
 ================
 The SendGrid-Reversi is an open source demo project.  
 
+# How it works
+
+This application uses some of SendGrid API.
+* Web API(Mail, Filter Settings, Parse Webhook Settings)
+* Parse Webhook
+* Event Webhook (Click)
+* Template Engine API
+
+This application stores the game data and template id to MongoDB.
+
 # System Requirements
 * [Ruby](https://www.ruby-lang.org) 2.0.0 or higher
 * [Bundler](http://bundler.io/)
