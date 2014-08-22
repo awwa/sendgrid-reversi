@@ -68,11 +68,11 @@ MONGO_PASSWORD=
 |**MONGO_PASSWORD**   |The password of mongodb for access.|
 
 # Launch the application
-### 1. Launch mongod  
+##### 1. Launch mongod  
 ``` bash
 $ mongod
 ```
-### 2. Launch Application  
+##### 2. Launch Application  
 The application setup SendGrid when first time launch. Also start the service to listen.  
 ``` bash
 $ RACK_ENV=production rackup -p 4567
@@ -80,7 +80,7 @@ $ RACK_ENV=production rackup -p 4567
 
 # Usage
 
-### 1. Start a game  
+##### 1. Start a game  
 Player1 sends email to any address of PARSE_HOST domain.  
 That subject include email address of player2.
 ``` text
@@ -88,20 +88,20 @@ To: game@your.receive.domain
 Subject: player2@address.test
 ```
 
-### 2. Get an email and click it  
+##### 2. Get an email and click it  
 Player2 get an email like this.  
 He(she) can click on the email where he(she) want to put disc.
 <img src="https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png" width="450px" />  
 After this, the each player get an email then click it.
 
-### 3. Pass your turn  
+##### 3. Pass your turn  
 You can click 'Pass your turn' link under the board if you want to pass your turn.  
 
-### 4. Finish the game  
+##### 4. Finish the game  
 The game will finish in the case:
   * All cell was filled.
   * Each player continuously clicked the pass link.
 
-### 5. text/plain part  
+##### 5. text/plain part  
 You can view text/plain version board email if your email client does not support html mail.
 <img src="https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_plain.png" width="450px" />  
