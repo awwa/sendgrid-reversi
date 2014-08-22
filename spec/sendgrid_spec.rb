@@ -8,10 +8,8 @@ describe "SendGrid" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
-        res_str = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
-        json_str = JSON.generate(res_str)
-        puts "json_str: #{json_str}"
-        res = JSON.parse(json_str)
+        res = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
+        expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect
@@ -25,9 +23,8 @@ describe "SendGrid" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
-        res_str = sendgrid.activate_app("clicktrack")
-        json_str = JSON.generate(res_str)
-        res = JSON.parse(json_str)
+        res = sendgrid.activate_app("clicktrack")
+        expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect
@@ -39,9 +36,8 @@ describe "SendGrid" do
       begin
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
-        res_str = sendgrid.activate_app("eventnotify")
-        json_str = JSON.generate(res_str)
-        res = JSON.parse(json_str)
+        res = sendgrid.activate_app("eventnotify")
+        expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect
@@ -59,9 +55,8 @@ describe "SendGrid" do
 
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
-        res_str = sendgrid.filter_setup(filter)
-        json_str = JSON.generate(res_str)
-        res = JSON.parse(json_str)
+        res = sendgrid.filter_setup(filter)
+        expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect
@@ -87,9 +82,8 @@ describe "SendGrid" do
         filter.params["url"] = settings.app_url + "/event"
 
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
-        res_str = sendgrid.filter_setup(filter)
-        json_str = JSON.generate(res_str)
-        res = JSON.parse(json_str)
+        res = sendgrid.filter_setup(filter)
+        expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect

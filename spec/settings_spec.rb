@@ -10,7 +10,7 @@ describe "Settings" do
       expect(settings.sendgrid_username).to eq("your_username")
       expect(settings.sendgrid_password).to eq("your_password")
       expect(settings.app_url).to eq("http://app.host.example.com")
-      expect(settings.parse_host).to eq("rev.awwa500.bymail.in")
+      expect(settings.parse_host).to eq("your.receive.domain")
       expect(settings.mongo_host).to eq("localhost")
       expect(settings.mongo_port).to eq("27017")
       expect(settings.mongo_db).to eq("reversi")

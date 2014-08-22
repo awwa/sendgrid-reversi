@@ -1,4 +1,5 @@
 .env
+.env.spec
 *.gem
 *.rbc
 /.config
