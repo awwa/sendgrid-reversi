@@ -133,7 +133,7 @@ class Game
 
   def is_available_dir(st_row, st_col, dir)
     # even is white. odd is black.
-    (turn % 2 == 0) ? pebble = :w : pebble = :b
+    (turn % 2 == 0) ? disc = :w : disc = :b
     has_possible = false
     i = 0
     begin
@@ -152,10 +152,10 @@ class Game
 
       if has_possible == true then
         # available if it can be between
-        return true if @board[tg_row][tg_col] == pebble
+        return true if @board[tg_row][tg_col] == disc
       else
         # unavailable if neighbor is same color
-        return false if @board[tg_row][tg_col] == pebble
+        return false if @board[tg_row][tg_col] == disc
         # possible if neighbor is not same color. go next loop.
         has_possible = true
         next
@@ -168,12 +168,12 @@ class Game
 
   def handle_turn(row, col)
     # even is white. odd is black.
-    (turn % 2 == 0) ? pebble = :w : pebble = :b
+    (turn % 2 == 0) ? disc = :w : disc = :b
     # process the game if valid cell
     if row >= 0 && row <= 7 && col >= 0 && col <= 7 then
-      @board[row][col] = pebble
-      reverse(row, col, pebble)
-      @history.push("#{pebble.to_s}_#{row}_#{col}")
+      @board[row][col] = disc
+      reverse(row, col, disc)
+      @history.push("#{disc.to_s}_#{row}_#{col}")
     else
       @history.push("pass")
     end
@@ -193,18 +193,18 @@ class Game
     true
   end
 
-  def reverse(row, col, pebble)
-    reverse_dir(row, col, pebble, Dir::UP)         if is_available_dir(row, col, Dir::UP)
-    reverse_dir(row, col, pebble, Dir::UP_RIGHT)   if is_available_dir(row, col, Dir::UP_RIGHT)
-    reverse_dir(row, col, pebble, Dir::RIGHT)      if is_available_dir(row, col, Dir::RIGHT)
-    reverse_dir(row, col, pebble, Dir::DOWN_RIGHT) if is_available_dir(row, col, Dir::DOWN_RIGHT)
-    reverse_dir(row, col, pebble, Dir::DOWN)       if is_available_dir(row, col, Dir::DOWN)
-    reverse_dir(row, col, pebble, Dir::DOWN_LEFT)  if is_available_dir(row, col, Dir::DOWN_LEFT)
-    reverse_dir(row, col, pebble, Dir::LEFT)       if is_available_dir(row, col, Dir::LEFT)
-    reverse_dir(row, col, pebble, Dir::UP_LEFT)    if is_available_dir(row, col, Dir::UP_LEFT)
+  def reverse(row, col, disc)
+    reverse_dir(row, col, disc, Dir::UP)         if is_available_dir(row, col, Dir::UP)
+    reverse_dir(row, col, disc, Dir::UP_RIGHT)   if is_available_dir(row, col, Dir::UP_RIGHT)
+    reverse_dir(row, col, disc, Dir::RIGHT)      if is_available_dir(row, col, Dir::RIGHT)
+    reverse_dir(row, col, disc, Dir::DOWN_RIGHT) if is_available_dir(row, col, Dir::DOWN_RIGHT)
+    reverse_dir(row, col, disc, Dir::DOWN)       if is_available_dir(row, col, Dir::DOWN)
+    reverse_dir(row, col, disc, Dir::DOWN_LEFT)  if is_available_dir(row, col, Dir::DOWN_LEFT)
+    reverse_dir(row, col, disc, Dir::LEFT)       if is_available_dir(row, col, Dir::LEFT)
+    reverse_dir(row, col, disc, Dir::UP_LEFT)    if is_available_dir(row, col, Dir::UP_LEFT)
   end
 
-  def reverse_dir(st_row, st_col, pebble, dir)
+  def reverse_dir(st_row, st_col, disc, dir)
     i = 0
     begin
       # move target cell
@@ -216,9 +216,9 @@ class Game
       break if tg_col < 0
       break if tg_row > 7
       break if tg_col > 7
-      break if @board[tg_row][tg_col] == pebble
+      break if @board[tg_row][tg_col] == disc
 
-      @board[tg_row][tg_col] = pebble
+      @board[tg_row][tg_col] = disc
 
       # until end of board
     end while (tg_row <= 7 && tg_row >= 0 && tg_col <= 7 && tg_col >= 0)
