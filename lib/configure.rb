@@ -19,6 +19,7 @@ module Configure
   def init_apps(settings)
     sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
 
+    sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
     sendgrid.activate_app("clicktrack")
     sendgrid.activate_app("eventnotify")
 

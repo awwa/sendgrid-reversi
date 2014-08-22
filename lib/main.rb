@@ -120,7 +120,7 @@ module Reversi
     # Do not handle get event for security
     # User event is handled in post event
     get '/event' do
-      '受け付けました。'
+      'Your request has been accepted.'
     end
 
   end
