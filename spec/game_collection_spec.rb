@@ -8,10 +8,10 @@ describe "GameCollection" do
     end
   end
 
-  describe "dropAll" do
+  describe "drop_all" do
     it "全削除検査" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
     end
   end
 
@@ -19,7 +19,7 @@ describe "GameCollection" do
     it "挿入検査" do
       game = Game.new
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
       id = dba.insert(game)
       expect(id.class.name).to eq("BSON::ObjectId")
       gameActual = dba.findById(id)
@@ -32,7 +32,7 @@ describe "GameCollection" do
     it "存在しない場合の更新検査" do
       game = Game.new
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
       ret = dba.update(game)
       expect(ret['n']).to eq(0)
     end
@@ -40,7 +40,7 @@ describe "GameCollection" do
     it "存在する場合の更新検査" do
       game = Game.new
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
       ret = dba.insert(game)
       game.player_odd = "odd@address.com"
       game.player_even = "even@address.com"
@@ -62,13 +62,13 @@ describe "GameCollection" do
   describe "findById" do
     it "存在しないIDによる検査" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
       actual = dba.findById(BSON::ObjectId.from_string("53e317befe1c1d2b39000001"))
       expect(actual).to eq(nil)
     end
     it "存在するIDによる検査" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
       game = Game.new
       expect_id = dba.insert(game)
       actual = dba.findById(expect_id)
@@ -79,7 +79,7 @@ describe "GameCollection" do
   describe "find" do
     it "正常なplayerによる検索" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
 
       game1 = Game.new
       game1.player_even = "even1@address.com"
@@ -101,7 +101,7 @@ describe "GameCollection" do
 
     it "逆順playerによる検索" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
 
       game1 = Game.new
       game1.player_even = "even1@address.com"
@@ -123,7 +123,7 @@ describe "GameCollection" do
 
     it "存在しないplayerによる検索" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
 
       game1 = Game.new
       game1.player_even = "even1@address.com"
@@ -145,7 +145,7 @@ describe "GameCollection" do
   describe "remove" do
     it "存在するID指定削除検査" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
 
       game = Game.new
       expect_id = dba.insert(game)
@@ -156,7 +156,7 @@ describe "GameCollection" do
 
     it "存在しないID指定削除検査" do
       dba = GameCollection.new
-      dba.dropAll
+      dba.drop_all
 
       game = Game.new
       expect_id = dba.insert(game)

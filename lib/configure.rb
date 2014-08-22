@@ -48,7 +48,7 @@ module Configure
     appConfig = dba.find_one
     puts "appConfig: #{appConfig.inspect}"
     if appConfig == nil then
-      # テンプレートIDを保持していなければ、テンプレートを作成する。
+      # Create template if no template id
       tmp_id_board, tmp_id_message = Configure.create_template(settings)
       config = AppConfig.new
       config.template_id_board = tmp_id_board
@@ -81,7 +81,7 @@ module Configure
     puts "exist_board: #{exist_board}"
     puts "exist_message: #{exist_message}"
 
-    # 特定名称のテンプレートが存在したらそこにバージョン作成する
+    # Create version
     if !exist_board then
       puts "create template #{TEMP_NAME_BOARD}"
       tmp_board = templates.post(TEMP_NAME_BOARD)
@@ -90,8 +90,6 @@ module Configure
       puts "create template #{TEMP_NAME_MESSAGE}"
       tmp_message = templates.post(TEMP_NAME_MESSAGE)
     end
-
-    # バージョンを作成する
     versions = SendgridTemplateEngine::Versions.new(settings.sendgrid_username, settings.sendgrid_password)
 
     new_ver_board = SendgridTemplateEngine::Version.new()

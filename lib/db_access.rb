@@ -33,7 +33,7 @@ class DbAccess
     @coll.remove({:_id => id})
   end
 
-  def dropAll
+  def drop_all
     @coll.drop
   end
 

@@ -3,23 +3,23 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "AppConfigCollection" do
   describe "initialize" do
-    it "初期値検査" do
+    it "Validate constructor" do
       dba = AppConfigCollection.new
     end
   end
 
-  describe "dropAll" do
-    it "全削除検査" do
+  describe "drop_all" do
+    it "Validate drop all" do
       dba = AppConfigCollection.new
-      dba.dropAll
+      dba.drop_all
     end
   end
 
   describe "insert" do
-    it "挿入検査" do
+    it "Validate insert" do
       config = AppConfig.new
       dba = AppConfigCollection.new
-      dba.dropAll
+      dba.drop_all
       id = dba.insert(config)
       expect(id.class.name).to eq("BSON::ObjectId")
       configActual = dba.find_one
@@ -29,15 +29,15 @@ describe "AppConfigCollection" do
   end
 
   describe "find_one" do
-    it "存在しない場合の検査" do
+    it "Validate the case not exist" do
       dba = AppConfigCollection.new
-      dba.dropAll
+      dba.drop_all
       actual = dba.find_one
       expect(actual).to eq(nil)
     end
-    it "存在する場合の検査" do
+    it "Validate the case exist" do
       dba = AppConfigCollection.new
-      dba.dropAll
+      dba.drop_all
       config = AppConfig.new
       expect_id = dba.insert(config)
       actual = dba.find_one

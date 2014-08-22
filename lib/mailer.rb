@@ -33,9 +33,9 @@ class Mailer
 
     # Send accept mail for wait player
     if game.turn == 1 then
-      send_message(wait_player, "対戦リクエストを受け付けました。しばらくお待ちください。")
+      send_message(wait_player, "Your play request has been accepted. Please wait for email response.")
     else
-      send_message(wait_player, "相手プレイヤーに催促通知を送信しました。しばらくお待ちください。")
+      send_message(wait_player, "Your request has been sent to opponent player. Please wait for email response.")
     end
   end
 
@@ -84,10 +84,10 @@ class Mailer
     email.add_substitution("#name_w#", [name_w])
     email.add_substitution("#b#", [game.get_img_tag(@settings.app_url, "b.png")])
     email.add_substitution("#w#", [game.get_img_tag(@settings.app_url, "w.png")])
-    email.add_substitution("#h_finish#", [game.is_finish ? "<p style='width: 90%; background-color: #ff0000; color: #ffffff; padding: 1%;'>勝負あり</p>" : ""])
+    email.add_substitution("#h_finish#", [game.is_finish ? "<p style='width: 90%; background-color: #ff0000; color: #ffffff; padding: 1%;'>Game Over</p>" : ""])
 
     # for plain text template
-    email.add_substitution("#p_finish#", [game.is_finish ? "勝負あり" : ""])
+    email.add_substitution("#p_finish#", [game.is_finish ? "Game Over" : ""])
     email.add_substitution("#pb#", ["●"])
     email.add_substitution("#pw#", ["○"])
     for row in 0..7 do

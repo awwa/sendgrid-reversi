@@ -31,11 +31,11 @@ module Reversi
         # fail to parse address if it is nil
         mailer = Mailer.new
         if from != nil && to == nil then
-          logger.info "対戦相手のメールアドレスの抽出に失敗しました。件名に対戦相手のメールアドレスをセットしてメールを送信してください。"
+          logger.info "Failed to parse opponent player email address. Subject must include email address."
           return 'Fail to parse to address'
         end
         if from == nil && to == nil then
-          logger.info "アドレスの抽出に失敗しました。リクエスト内容を確認して下さい。"
+          logger.info "Failed to parse email address. Please check the request."
           logger.info "from: #{params[:from]}"
           logger.info "subject: #{params[:subject]}"
           return 'Fail to parse to and from address'

@@ -35,7 +35,7 @@ describe "Configure" do
     it "テンプレート初期化検査" do
       begin
         dba = AppConfigCollection.new
-        dba.dropAll
+        dba.drop_all
 
         settings = Settings.new
         appConfig = Configure.init_template(settings)
