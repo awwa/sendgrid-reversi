@@ -83,6 +83,7 @@ That subject include email address of player2.
 To: game@your.receive.domain
 Subject: player2@address.test
 ```
+
 2. Get an email and click it  
 Player2 get an email like this.  
 He(she) can click on the email where he(she) want to put disc.
