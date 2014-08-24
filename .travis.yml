@@ -6,6 +6,8 @@ rvm:
 #  - "2.1.0"
 env:
   - RACK_ENV=test
+services:
+  - mongodb
 before_script:
   - bundle install
 script:
