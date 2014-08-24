@@ -11,5 +11,5 @@ services:
 before_script:
   - bundle install
 script:
-  - bundle exec rspec spec/main_spec.rb
-#  - rspec spec/main_spec.rb
+- bundle exec rspec spec/mailer_spec.rb
+#  - bundle exec rspec spec/main_spec.rb
