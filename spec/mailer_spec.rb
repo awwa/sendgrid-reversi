@@ -6,6 +6,8 @@ describe "Mailer" do
 
   before :all do
     config = Dotenv.overload(".env.spec")
+    settings = Settings.new
+    Configure.init_sendgrid(settings)
   end
 
   describe "send" do

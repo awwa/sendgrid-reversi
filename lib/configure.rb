@@ -49,6 +49,8 @@ module Configure
     appConfig = dba.find_one
     puts "appConfig: #{appConfig.inspect}"
     if appConfig == nil then
+      Configure.delete_template(settings, Configure::TEMP_NAME_BOARD)
+      Configure.delete_template(settings, Configure::TEMP_NAME_MESSAGE)
       # Create template if no template id
       tmp_id_board, tmp_id_message = Configure.create_template(settings)
       config = AppConfig.new
