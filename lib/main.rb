@@ -61,6 +61,7 @@ module Reversi
         logger.info "game._id: #{game._id}"
         mailer.send(game)
       rescue => e
+        puts e.inspect
         logger.error e.backtrace
         logger.error e.inspect
       end
