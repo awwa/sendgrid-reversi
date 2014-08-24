@@ -9,4 +9,4 @@ env:
 before_script:
   - bundle install
 script:
-  - rspec
+  - rspec spec/main_spec.rb
