@@ -8,7 +8,7 @@ class Settings
 
   def initialize(file=nil)
     if file == nil
-      config = Dotenv.load
+      config = Dotenv.load 
     else
       config = Dotenv.overload(file)
     end
