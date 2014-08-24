@@ -9,11 +9,10 @@ describe "SendGrid" do
         settings = Settings.new
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
-        expect(res.has_key?("message")).to eq(true)
-        expect(res["message"]).to eq("success")
       rescue => e
         puts e.inspect
         puts e.backtrace
+        raise e
       end
     end
   end
@@ -29,6 +28,7 @@ describe "SendGrid" do
       rescue => e
         puts e.inspect
         puts e.backtrace
+        raise e
       end
     end
 
@@ -42,6 +42,7 @@ describe "SendGrid" do
       rescue => e
         puts e.inspect
         puts e.backtrace
+        raise e
       end
     end
   end
@@ -61,6 +62,7 @@ describe "SendGrid" do
       rescue => e
         puts e.inspect
         puts e.backtrace
+        raise e
       end
     end
 
@@ -88,6 +90,7 @@ describe "SendGrid" do
       rescue => e
         puts e.inspect
         puts e.backtrace
+        raise e
       end
     end
 

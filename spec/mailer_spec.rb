@@ -23,6 +23,8 @@ describe "Mailer" do
         mailer.send(game)
       rescue => e
         puts e.inspect
+        puts e.backtrace
+        raise e
       end
     end
   end
@@ -31,9 +33,11 @@ describe "Mailer" do
     it "Validate send message email" do
       begin
         mailer = Mailer.new
-        mailer.send_message("awwa500@gmail.com", "This is the test mail.")
+        mailer.send_message(ENV["PLAYER1"], "This is the test mail.")
       rescue => e
         puts e.inspect
+        puts e.backtrace
+        raise e
       end
     end
   end
@@ -53,6 +57,8 @@ describe "Mailer" do
         mailer.send_board(game.player_even, game)
       rescue => e
         puts e.inspect
+        puts e.backtrace
+        raise e
       end
     end
 
@@ -72,6 +78,8 @@ describe "Mailer" do
         mailer.send_board(game.player_even, game)
       rescue => e
         puts e.inspect
+        puts e.backtrace
+        raise e
       end
     end
 

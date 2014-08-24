@@ -113,10 +113,25 @@ module Configure
 
   end
 
+  def delete_template(settings, name)
+    templates = SendgridTemplateEngine::Templates.new(settings.sendgrid_username, settings.sendgrid_password)
+    tmps = templates.get_all()
+    tmps.each {|tmp|
+      if tmp.name == name then
+        tmp.versions.each {|ver|
+          versions = SendgridTemplateEngine::Versions.new(settings.sendgrid_username, settings.sendgrid_password)
+          versions.delete(tmp.id, ver.id)
+          ver.id
+        }
+        templates.delete(tmp.id)
+      end
+    }
+  end
+
   module_function :init_sendgrid
   module_function :init_apps
   module_function :init_template
   module_function :create_template
-
+  module_function :delete_template
 
 end
