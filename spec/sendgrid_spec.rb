@@ -85,6 +85,7 @@ describe "SendGrid" do
 
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res = sendgrid.filter_setup(filter)
+        puts "res: #{res.inspect}"
         expect(res.has_key?("message")).to eq(true)
         expect(res["message"]).to eq("success")
       rescue => e
