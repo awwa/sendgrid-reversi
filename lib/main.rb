@@ -34,6 +34,7 @@ module Reversi
           logger.info "Failed to parse opponent player email address. Subject must include email address."
           return 'Fail to parse to address'
         end
+        logger.info "from: #{from} to: #{to}"
         if from == nil && to == nil then
           logger.info "Failed to parse email address. Please check the request."
           logger.info "from: #{params[:from]}"
