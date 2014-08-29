@@ -4,6 +4,8 @@ The SendGrid-Reversi is an open source demo project.
 
 [![Build Status](https://travis-ci.org/awwa/sendgrid-reversi.svg?branch=master)](https://travis-ci.org/awwa/sendgrid-reversi)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
 # How it works
 
 This application is Ruby application to work on Sinatra.  
