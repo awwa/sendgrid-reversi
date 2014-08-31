@@ -15,7 +15,7 @@ class Settings
     @sendgrid_username = ENV["SENDGRID_USERNAME"]
     @sendgrid_password = ENV["SENDGRID_PASSWORD"]
     @app_url = ENV["APP_URL"]
-    @parse_host = ENV["PARSE_HOST"]
+    @parse_host = ENV["PARSE_HOST"] || "#{@sendgrid_username}.webhook.email"
     @mongo_url = ENV["MONGO_URL"] || ENV["MONGOHQ_URL"]
     @mongo_host = ENV["MONGO_HOST"]
     @mongo_port = ENV["MONGO_PORT"]
