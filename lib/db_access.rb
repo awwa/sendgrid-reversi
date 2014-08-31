@@ -2,7 +2,6 @@
 
 require 'mongo'
 require 'uri'
-include Mongo
 require './lib/settings'
 
 class DbAccess
