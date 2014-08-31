@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 
+require 'pry'
 require 'mongo'
+require 'uri'
+include Mongo
 require './lib/settings'
 
 class DbAccess
@@ -9,15 +12,28 @@ class DbAccess
 
   def initialize(coll_name)
     settings = Settings.new
-    if settings.mongo_port.length > 0 then
-      @connection = Mongo::Connection.new(settings.mongo_host, settings.mongo_port)
+
+    if settings.mongo_url.length > 0 then
+      db = URI.parse(settings.mongo_url)
+      db_name = db.path.gsub(/^\//, '')
+
+      @connection = Mongo::Connection.new(db.host, db.port)
+      @db = @connection.db(db_name)
+      if db.user.length > 0 then
+        auth = @db.authenticate(db.user, db.password)
+      end
     else
-      @connection = Mongo::Connection.new(settings.mongo_host)
+      if settings.mongo_port.length > 0 then
+        @connection = Mongo::Connection.new(settings.mongo_host, settings.mongo_port)
+      else
+        @connection = Mongo::Connection.new(settings.mongo_host)
+      end
+      @db = @connection.db(settings.mongo_db)
+      if settings.mongo_username.length > 0 then
+        auth = @db.authenticate(settings.mongo_username, settings.mongo_password)
+      end
     end
-    @db = @connection.db(settings.mongo_db)
-    if settings.mongo_username.length > 0 then
-      auth = @db.authenticate(settings.mongo_username, settings.mongo_password)
-    end
+
     @coll = @db.collection(coll_name)
   end
 
