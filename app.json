@@ -7,8 +7,13 @@
   "keywords": ["reversi", "game", "sendgrid"],
   "env": {
     "APP_URL": {
-      "description": "The full heroku url this is being deployed to.",
+      "description": "Your application URL. In this case, your heroku url.",
       "value": "http://your-subdomain.herokuapp.com",
+      "required": true
+    },    
+    "PARSE_HOST": {
+      "description": "The domain name of receive email.",
+      "value": "something.webhook.email",
       "required": true
     }
   },
