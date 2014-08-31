@@ -5,6 +5,13 @@
   "repository": "https://github.com/scottmotte/sendgrid-reversi",
   "logo": "https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png",
   "keywords": ["reversi", "game", "sendgrid"],
+  "env": {
+    "APP_URL": {
+      "description": "The full heroku url this is being deployed to.",
+      "value": "http://your-subdomain.herokuapp.com",
+      "required": true
+    }
+  },
   "addons": [
     "mongohq",
     "sendgrid"
