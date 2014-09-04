@@ -21,7 +21,7 @@ describe "Configure" do
     it "Validate manage templates" do
       begin
         settings = Settings.new
-        puts "AAAAAAAAAAA"
+        puts settings.sendgrid_username
         # delete
         Configure.delete_template(settings, "not exist template")
         Configure.delete_template(settings, Configure::TEMP_NAME_BOARD)
