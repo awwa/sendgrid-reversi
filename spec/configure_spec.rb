@@ -22,7 +22,8 @@ describe "Configure" do
       begin
         settings = Settings.new
         puts "CCCCCCCCCCCCCC"
-        puts settings.sendgrid_username
+        puts "SENDGRID_USERNAME: #{settings.sendgrid_username}"
+        puts "#{settings.sendgrid_password}"
         puts "APP_URL: #{settings.app_url}"
         # delete
         Configure.delete_template(settings, "not exist template")
