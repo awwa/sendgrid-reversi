@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-require 'sendgrid_template_engine'
-require 'templates'
+require 'sendgrid4r'
 require './lib/app_config_collection'
 require './lib/app_config'
 require './lib/sendgrid'
@@ -63,9 +62,9 @@ module Configure
   end
 
   def create_template(settings)
-
-    templates = SendgridTemplateEngine::Templates.new(settings.sendgrid_username, settings.sendgrid_password)
-    tmps = templates.get_all()
+    # Create template
+    client = SendGrid4r::Client.new(settings.sendgrid_username, settings.sendgrid_password)
+    tmps = client.get_templates
     exist_board = false
     exist_message = false
     tmp_board = nil
@@ -80,52 +79,43 @@ module Configure
         tmp_message = tmp
       end
     }
-
     puts "exist_board: #{exist_board}"
     puts "exist_message: #{exist_message}"
-
     # Create version
     if !exist_board then
       puts "create template #{TEMP_NAME_BOARD}"
-      tmp_board = templates.post(TEMP_NAME_BOARD)
+      tmp_board = client.post_template(TEMP_NAME_BOARD)
     end
     if !exist_message then
       puts "create template #{TEMP_NAME_MESSAGE}"
-      tmp_message = templates.post(TEMP_NAME_MESSAGE)
+      tmp_message = client.post_template(TEMP_NAME_MESSAGE)
     end
-    versions = SendgridTemplateEngine::Versions.new(settings.sendgrid_username, settings.sendgrid_password)
 
-    new_ver_board = SendgridTemplateEngine::Version.new()
-    new_ver_board.set_name("reversi_board_1")
-    new_ver_board.set_subject("<%subject%>")
-    new_ver_board.set_html_content(open("./template/reversi-board.html").read)
-    new_ver_board.set_plain_content(open("./template/reversi-board.txt").read)
-    new_ver_board.set_active(1)
-    versions.post(tmp_board.id, new_ver_board)
+    factory = SendGrid4r::VersionFactory.new
+    html_content_board = open("./template/reversi-board.html").read
+    plain_content_board = open("./template/reversi-board.txt").read
+    new_ver_board = factory.create("reversi_board_1", "<%subject%>", html_content_board, plain_content_board, 1)
+    client.post_version(tmp_board.id, new_ver_board)
 
-    new_ver_message= SendgridTemplateEngine::Version.new()
-    new_ver_message.set_name("reversi_message_1")
-    new_ver_message.set_subject("<%subject%>")
-    new_ver_message.set_html_content(open("./template/reversi-message.html").read)
-    new_ver_message.set_plain_content(open("./template/reversi-message.txt").read)
-    new_ver_message.set_active(1)
-    versions.post(tmp_message.id, new_ver_message)
+    html_content_message = open("./template/reversi-message.html").read
+    plain_content_message = open("./template/reversi-message.txt").read
+    new_ver_message = factory.create("reversi_message_1", "<%subject%>", html_content_message, plain_content_message, 1)
+    client.post_version(tmp_message.id, new_ver_message)
 
     [tmp_board.id, tmp_message.id]
 
   end
 
   def delete_template(settings, name)
-    templates = SendgridTemplateEngine::Templates.new(settings.sendgrid_username, settings.sendgrid_password)
-    tmps = templates.get_all()
+    client = SendGrid4r::Client.new(settings.sendgrid_username, settings.sendgrid_password)
+    tmps = client.get_templates
     tmps.each {|tmp|
       if tmp.name == name then
         tmp.versions.each {|ver|
-          versions = SendgridTemplateEngine::Versions.new(settings.sendgrid_username, settings.sendgrid_password)
-          versions.delete(tmp.id, ver.id)
+          client.delete_version(tmp.id, ver.id)
           ver.id
         }
-        templates.delete(tmp.id)
+        client.delete_template(tmp.id)
       end
     }
   end
