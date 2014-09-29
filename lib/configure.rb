@@ -101,7 +101,7 @@ module Configure
     new_ver_board.set_html_content(open("./template/reversi-board.html").read)
     new_ver_board.set_plain_content(open("./template/reversi-board.txt").read)
     new_ver_board.set_active(1)
-    ver_board = versions.post(tmp_board.id, new_ver_board)
+    versions.post(tmp_board.id, new_ver_board)
 
     new_ver_message= SendgridTemplateEngine::Version.new()
     new_ver_message.set_name("reversi_message_1")
@@ -109,7 +109,7 @@ module Configure
     new_ver_message.set_html_content(open("./template/reversi-message.html").read)
     new_ver_message.set_plain_content(open("./template/reversi-message.txt").read)
     new_ver_message.set_active(1)
-    ver_message = versions.post(tmp_message.id, new_ver_message)
+    versions.post(tmp_message.id, new_ver_message)
 
     [tmp_board.id, tmp_message.id]
 

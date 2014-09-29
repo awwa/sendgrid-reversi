@@ -16,7 +16,7 @@ class DbAccess
     end
     @db = @connection.db(settings.mongo_db)
     if settings.mongo_username.length > 0 then
-      auth = @db.authenticate(settings.mongo_username, settings.mongo_password)
+      @db.authenticate(settings.mongo_username, settings.mongo_password)
     end
     @coll = @db.collection(coll_name)
   end

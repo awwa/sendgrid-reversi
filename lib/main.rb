@@ -78,8 +78,6 @@ module Reversi
             # handle only click event
             next if event['event'] != "click"
             logger.info "got click event"
-            # requester address
-            email = event['email']
             # parse the url clicked by user
             event_data = Game.parse_cell_url(event['url'])
             # validate the event data

@@ -49,7 +49,7 @@ class Mailer
     email.add_filter("templates", "enabled", 1)
     email.add_filter("templates", "template_id", @app_config.template_id_message)
     sendgrid = SendgridRuby::Sendgrid.new(@settings.sendgrid_username, @settings.sendgrid_password)
-    response = sendgrid.send(email)
+    sendgrid.send(email)
     @logger.info "send_message: #{to}"
   end
 
