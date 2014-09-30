@@ -11,11 +11,7 @@ describe "Settings" do
       expect(settings.sendgrid_password).to eq("your_password")
       expect(settings.app_url).to eq("http://app.host.example.com")
       expect(settings.parse_host).to eq("your.receive.domain")
-      expect(settings.mongo_host).to eq("localhost")
-      expect(settings.mongo_port).to eq("27017")
-      expect(settings.mongo_db).to eq("reversi")
-      expect(settings.mongo_username).to eq("")
-      expect(settings.mongo_password).to eq("")
+      expect(settings.mongo_url).to eq("mongodb://localhost:27017/reversi_development")
     end
   end
 

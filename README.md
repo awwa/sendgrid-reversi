@@ -12,7 +12,7 @@ This uses some of SendGrid APIs.
 * SMTP API(To, Substitutions, Filters)
 * Parse Webhook
 * Event Webhook (Click)
-* Template Engine API
+* Template Engine
 
 This stores the game data and template id to MongoDB.
 
@@ -22,9 +22,32 @@ This stores the game data and template id to MongoDB.
 * [MongoDB](http://www.mongodb.org/)
 * [ngrok](https://ngrok.com/) (for local environment)
 
-# Installation & Setup
+# Installation, Setup & Launch the application
+You have 2 options for launching the application.
+You can launch the application on local environment or Heroku.
+Heroku is simple way.
 
-##### 1. Run the ngrok  
+### 1. Heroku
+
+##### 1-1. Click Heroku button
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+##### 1-2. Setup the application
+
+|Parameters           |Description                          |
+|:--------------------|:------------------------------------|
+|**APP_URL**          |Your application URL.                |
+|**PARSE_HOST**       |The domain name of receive email.        |
+
+##### 1-3. View the application
+
+Access APP_URL for checking the application launch.
+Now you are ready for reversi! Goto Usage.
+
+### 2. Local environment
+
+##### 2-1. Run the ngrok  
 [ngrok](https://ngrok.com/) is easy way to publish your service if you launch the application on local environment.  
 '4567' is the port number to tunnel.  
 You will see Forwarding URL when you launch ngrok.
@@ -40,34 +63,30 @@ Web Interface                 127.0.0.1:4040
 Avg Conn Time                 0.00ms
 ```
 
-##### 2. Get the source code from GitHub
+##### 2-2. Get the source code from GitHub
 ``` bash
 $ git clone https://github.com/awwa/sendgrid-reversi.git
 $ cd sendgrid-reversi
 ```
 
-##### 3. Run bundle install
+##### 2-3. Run bundle install
 ``` bash
 $ bundle install
 ```
 
-##### 4. Copy .env file
+##### 2-4. Copy .env file
 ``` bash
 $ cp .env.example .env
 ```
 
-##### 5. Edit the .env file
+##### 2-5. Edit the .env file
 ``` bash
 vi .env
 SENDGRID_USERNAME=your_username
 SENDGRID_PASSWORD=your_password
 APP_URL=http://app.host.example.com
 PARSE_HOST=your.receive.domain
-MONGO_HOST=localhost
-MONGO_PORT=27017
-MONGO_DB=reversi
-MONGO_USERNAME=
-MONGO_PASSWORD=
+MONGO_URL=mongodb://user:pass@localhost:27017/reversi_development
 ```
 
 |Parameters           |Description                          |
@@ -76,18 +95,13 @@ MONGO_PASSWORD=
 |**SENDGRID_PASSWORD**|Your SendGrid password.              |
 |**APP_URL**          |Your application URL. 'URL Forwarding' value if you use ngrok.     |
 |**PARSE_HOST**       |The domain name of receive email.        |
-|**MONGO_HOST**       |The host name of mongodb running.    |
-|**MONGO_PORT**       |The port number of mongodb listening.|
-|**MONGO_DB**         |The name of db. 'reversi' is the default.|
-|**MONGO_USERNAME**   |The username of mongodb. remains empty if no need to authenticate.|
-|**MONGO_PASSWORD**   |The password of mongodb for access.|
+|**MONGO_URL**        |The url of mongodb. ex.  mongodb://user:pass@localhost:27017/reversi_development   |
 
-# Launch the application
-##### 1. Launch mongod  
+##### 2-6. Launch mongod  
 ``` bash
 $ mongod
 ```
-##### 2. Launch Application  
+##### 2-7. Launch Application  
 The application setup SendGrid when first time launch. Also start the service to listen.  
 ``` bash
 $ RACK_ENV=production rackup -p 4567

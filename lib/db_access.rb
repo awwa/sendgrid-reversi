@@ -9,14 +9,14 @@ class DbAccess
 
   def initialize(coll_name)
     settings = Settings.new
-    if settings.mongo_port.length > 0 then
-      @connection = Mongo::Connection.new(settings.mongo_host, settings.mongo_port)
-    else
-      @connection = Mongo::Connection.new(settings.mongo_host)
-    end
-    @db = @connection.db(settings.mongo_db)
-    if settings.mongo_username.length > 0 then
-      @db.authenticate(settings.mongo_username, settings.mongo_password)
+
+    db = URI.parse(settings.mongo_url)
+    db_name = db.path.gsub(/^\//, '')
+
+    @connection = Mongo::Connection.new(db.host, db.port)
+    @db = @connection.db(db_name)
+    if db.user != nil then
+      @db.authenticate(db.user, db.password)
     end
     @coll = @db.collection(coll_name)
   end

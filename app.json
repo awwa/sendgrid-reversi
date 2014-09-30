@@ -1,0 +1,24 @@
+{
+  "name": "sendgrid-reversi",
+  "description": "Play games of reversi over email with a friend.",
+  "website": "https://github.com/awwa/sendgrid-reversi",
+  "repository": "https://github.com/awwa/sendgrid-reversi",
+  "logo": "https://raw.githubusercontent.com/awwa/sendgrid-reversi/master/dev/board_html.png",
+  "keywords": ["reversi", "game", "sendgrid"],
+  "env": {
+    "APP_URL": {
+      "description": "Your application URL. In this case, your heroku url.",
+      "value": "http://your-subdomain.herokuapp.com",
+      "required": true
+    },
+    "PARSE_HOST": {
+      "description": "The domain name of receive email.",
+      "value": "something.webhook.email",
+      "required": true
+    }
+  },
+  "addons": [
+    "mongohq",
+    "sendgrid"
+  ]
+}

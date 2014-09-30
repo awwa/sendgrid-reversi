@@ -122,6 +122,11 @@ module Reversi
       'Your request was accepted.'
     end
 
+    get '/' do
+      settings = Settings.new
+      "Please email to: demo@#{settings.parse_host}, subject: the email address of the opponent player."
+    end
+
   end
 
 end

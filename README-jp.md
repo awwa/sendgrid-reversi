@@ -10,7 +10,7 @@ SendGrid-Reversiはオープンソースのデモプロジェクトです。
 * SMTP API(To, Substitutions, Filters)
 * Parse Webhook
 * Event Webhook (Click)
-* Template Engine API
+* Template Engine
 
 また、このアプリケーションはゲームデータとテンプレートIDをMongoDBに保存します。
 
@@ -20,9 +20,32 @@ SendGrid-Reversiはオープンソースのデモプロジェクトです。
 * [MongoDB](http://www.mongodb.org/)
 * [ngrok](https://ngrok.com/) (ローカル環境で起動する場合)
 
-# インストールとセットアップ
+# インストール, セットアップ, アプリケーションの起動
 
-##### 1. ngrokの起動  
+ローカル環境またはHerokuの2つのアプリケーションの起動方法を紹介します。
+Heroku上で起動するのが簡単です。
+
+### 1. Heroku
+
+##### 1-1. Heroku ボタンをクリック
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+##### 1-2. アプリケーションのセットアップ
+
+|パラメータ            |詳細                                  |
+|:--------------------|:------------------------------------|
+|**APP_URL**          |アプリケーションのURL                   |
+|**PARSE_HOST**       |メールを受信するドメイン名               |
+
+##### 1-3. 確認
+
+APP_URL にアクセスしてアプリケーションの起動を確認します。
+アクセスできたら準備完了です。遊び方に従って遊んで下さい。
+
+### 2. ローカル環境
+
+##### 2-1. ngrokの起動  
 [ngrok](https://ngrok.com/)はアプリケーションをローカル環境で起動する場合、簡単にサービスを公開することができます。  
 '4567'はトンネリングするポート番号です。  
 ngrokを起動してForwarding URLを確認します。（あとで設定ファイルに記載します）  
@@ -38,34 +61,30 @@ Web Interface                 127.0.0.1:4040
 Avg Conn Time                 0.00ms
 ```
 
-##### 2. GitHubからソースコードを取得します
+##### 2-2. GitHubからソースコードを取得します
 ``` bash
 $ git clone https://github.com/awwa/sendgrid-reversi.git
 $ cd sendgrid-reversi
 ```
 
-##### 3. bundle installを実行します
+##### 2-3. bundle installを実行します
 ``` bash
 $ bundle install
 ```
 
-##### 4. .envファイルをコピーします
+##### 2-4. .envファイルをコピーします
 ``` bash
 $ cp .env.example .env
 ```
 
-##### 5. .envファイルを編集します
+##### 2-5. .envファイルを編集します
 ``` bash
 vi .env
 SENDGRID_USERNAME=your_username
 SENDGRID_PASSWORD=your_password
 APP_URL=http://app.host.example.com
 PARSE_HOST=your.receive.domain
-MONGO_HOST=localhost
-MONGO_PORT=27017
-MONGO_DB=reversi
-MONGO_USERNAME=
-MONGO_PASSWORD=
+MONGO_URL=mongodb://user:pass@localhost:27017/reversi_development
 ```
 
 |パラメータ           |詳細                          |
@@ -74,18 +93,13 @@ MONGO_PASSWORD=
 |**SENDGRID_PASSWORD**|SendGridのパスワード              |
 |**APP_URL**          |アプリケーションのURL。ngrokを使う場合、'Forwarding' URLです。 |
 |**PARSE_HOST**       |メールを受信するドメイン名        |
-|**MONGO_HOST**       |MongoDBを実行するホスト名   |
-|**MONGO_PORT**       |MongoDBが使用するポート番号|
-|**MONGO_DB**         |DB名。通常、'reversi'のままでOK。|
-|**MONGO_USERNAME**   |MongoDBのユーザ名。認証が不要な場合、空にしてください。|
-|**MONGO_PASSWORD**   |MongoDBのパスワード|
+|**MONGO_URL**        |MongoDBを実行するホスト名 例：mongodb://user:pass@localhost:27017/reversi_development  |
 
-# アプリケーションの起動
-##### 1. mongodの起動  
+##### 2-6. mongodの起動  
 ``` bash
 $ mongod
 ```
-##### 2. アプリケーションの起動  
+##### 2-7. アプリケーションの起動  
 このアプリケーションは初回起動時にSendGridをセットアップします。また、サービスを起動します。  
 ``` bash
 $ RACK_ENV=production rackup -p 4567
