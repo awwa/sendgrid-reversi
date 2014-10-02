@@ -123,8 +123,14 @@ module Reversi
     end
 
     get '/' do
+      redirect to("/game")
+    end
+
+    get '/game' do
       settings = Settings.new
-      "Please email to: demo@#{settings.parse_host}, subject: the email address of the opponent player."
+      @parse_host = settings.parse_host
+      erb :game
+      # "Please email to: demo@#{settings.parse_host}, subject: the email address of the opponent player."
     end
 
   end
