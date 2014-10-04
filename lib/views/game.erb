@@ -7,20 +7,21 @@
       Subject: The email address of the opponent player.
       <form id="param" class="form-horizontal">
 
-        <div class="form-group">
+        <div id="subject-form" class="form-group">
           <div class="col-md-12">
             <label class="control-label"><span class="text-danger">*</span>Opponent player</label>
           </div>
           <div class="col-md-12">
             <input type="text" id="subject" name="subject" class="form-control"
               placeholder="player2@address.com" />
-            <input type="hidden" id="to" value="demo@<%= @parse_host %>"/>
           </div>
         </div>
 
+        <input type="hidden" id="to" value="demo@<%= @parse_host %>"/>
+
       </form>
 
-      <button id="start" class="btn btn-primary center-block">Start</button>
+      <button id="client" class="btn btn-primary center-block">Start</button>
 
     </div>
 
@@ -30,3 +31,4 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/game.js"></script>
+<script src="js/jquery.qrcode.min.js"></script>
