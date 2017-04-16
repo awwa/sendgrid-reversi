@@ -7,6 +7,7 @@ describe "SendGrid" do
     it "Validate parse set" do
       begin
         settings = Settings.new
+        puts settings.sendgrid_username
         sendgrid = Sendgrid.new(settings.sendgrid_username, settings.sendgrid_password)
         res = sendgrid.parse_set(settings.parse_host, settings.app_url + "/game", 0)
       rescue => e
